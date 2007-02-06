@@ -9,3 +9,22 @@ function(x, standard.scale = FALSE,... ) {
 	plot(x$stimulus, x$pscale, ... )
 	}
 
+`lines.mlds`<-
+function(x, standard.scale = FALSE, ... ) {
+#x, object of class mlds
+	if (standard.scale) {
+		ll <- length(x$pscale)
+		lines(x$stimulus, x$pscale/x$pscale[ll], ...)
+	} else
+	lines(x$stimulus, x$pscale, ...)
+	}
+
+`points.mlds`<-
+function(x, standard.scale = FALSE, ... ) {
+#x, object of class mlds
+	if (standard.scale) {
+		ll <- length(x$pscale)
+		points(x$stimulus, x$pscale/x$pscale[ll], ...)
+	} else
+	points(x$stimulus, x$pscale, ...)
+	}

@@ -31,6 +31,6 @@ make.ix.mat(data, xi = NULL, ...)
 \examples{
 data(AutumnLab)
 make.ix.mat(AutumnLab)
-mlds(AutumnLab, c(0, seq(6, 30, 3)))
+mlds(AutumnLab, c(1, seq(6, 30, 3)))
 }
 \keyword{manip}

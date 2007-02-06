@@ -7,7 +7,8 @@ function(object, ...) {
 		 d <- object$data
 		 s <- object$sigma
 		 psc <- object$pscale
-		 del <- matrix(psc[unlist(subset(d, select = -resp))], 
+		 del <-  matrix(psc[unlist(d[, -d$resp])],
+#		 matrix(psc[unlist(subset(d, select = -resp))], 
 		 	ncol = 4) %*% c(1, -1, -1, 1)
 		z <- del/s
 		ans <- fam$linkinv(z)

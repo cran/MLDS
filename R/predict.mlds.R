@@ -3,8 +3,9 @@ function(object, newdata = NULL,
 		 type = "link", ...) {
 #object, obj of class mlds
 	# don't need type "terms"
+	miss <- missing(newdata)
 	if (object$method == "glm") {
-		if (is.null(newdata)) {
+		if (miss) {
 			ans <- predict(object$obj, type = type, ...) } else
 			{
 			 ans <- predict(object$obj, newdata = newdata,
@@ -15,9 +16,10 @@ function(object, newdata = NULL,
 	 fam <- binomial(link = object$link)
 	 psc <- object$pscale
 	 s <- object$sigma
-	 if (is.null(newdata)) d <- object$data else
+	 if (miss) d <- object$data else
 	 					  d <- newdata
-	 del <- matrix(psc[unlist(subset(d, select = -resp))], 
+	 del <-  matrix(psc[unlist(d[, -d$resp])],
+#	 matrix(psc[unlist(subset(d, select = -resp))], 
 		ncol = 4) %*% c(1, -1, -1, 1)
 	 z <- del/s
 	 if (type == "link") ans <- z else

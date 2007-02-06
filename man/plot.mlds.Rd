@@ -1,5 +1,7 @@
 \name{plot.mlds}
 \alias{plot.mlds}
+\alias{lines.mlds}
+\alias{points.mlds}
 
 \title{ Plot a mlds Object }
 \description{
@@ -7,6 +9,8 @@
 }
 \usage{
 \method{plot}{mlds}(x, standard.scale = FALSE, ...)
+\method{lines}{mlds}(x, standard.scale = FALSE, ...)
+\method{points}{mlds}(x, standard.scale = FALSE, ...)
 }
 
 \arguments{
@@ -20,7 +24,8 @@
 \seealso{ \code{\link{mlds}} }
 \examples{
 data(kk1)
-plot(mlds(SwapOrder(kk1)), type = "b")
+plot(mlds(SwapOrder(kk1)))
+lines(mlds(SwapOrder(kk1)))
 
 
 }

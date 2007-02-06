@@ -24,15 +24,19 @@ runSampleExperiment <- function(DisplayTrial, DefineStimuli,
 	topbot <- as.logical(rbinom(nrow(trial), 1, 0.5))
 	trial[topbot, ] <- trial[topbot, c(3, 4, 1, 2)]
 	resp <- rep(NA, nrow(trial))	
-	switch(.Platform$OS,
-				unix = if (.Platform$GUI == "AQUA")
-						quartz(width = DisplaySize, 
-							height = DisplaySize) else 
-						x11(width = DisplaySize, 
-							height = DisplaySize),
-				windows = windows(width = DisplaySize, 
-					height = DisplaySize))
-	NT <- if (is.null(NumTrials)) seq(nrow(trial)) else
+	dispdev <- switch(.Platform$OS,
+					unix = if (.Platform$GUI == "AQUA")
+						"quartz" else
+				 		"x11", windows = "windows")
+	do.call(dispdev, list(width = DisplaySize, 
+						  height = DisplaySize))				 
+#						quartz(width = DisplaySize, 
+#							height = DisplaySize) else 
+#						x11(width = DisplaySize, 
+#							height = DisplaySize),
+#				windows = windows(width = DisplaySize, 
+#					height = DisplaySize))
+	NT <- if (missing(NumTrials)) seq(nrow(trial)) else
 			seq(NumTrials)
 	for (tr in NT) {
 		par(mfrow = c(2, 2))

@@ -6,7 +6,7 @@ function(data, stimulus = NULL, method = "glm",
 			) {
 #data, data.frame from diff scale exp.
 #stimulus, physical levels
-	if (is.null(stimulus)) {
+	if (missing(stimulus)) {
 		if (inherits(data, "mlds.df")) {
 			stimulus <- attr(data, "stimulus")
 			} else
@@ -39,7 +39,8 @@ function(data, stimulus = NULL, method = "glm",
 		n[seq(2, nlen - 1)] <- plogis(x[seq(1, nlen - 2)])
 		s <- exp(x[nlen - 1])
 	
-		del <- matrix(n[unlist(subset(d, select = -resp))], 
+		del <-  matrix(n[unlist(d[, -d$resp])],
+#		matrix(n[unlist(subset(d, select = -resp))], 
 				ncol = 4) %*% c(1, -1, -1, 1)
 		z <- del/s
 		fam <- binomial(link = lnk)

@@ -26,7 +26,7 @@ lik6pt(x, Six.Pts, ...)
 \examples{
 
 data(kk1)
-x.df <- mlds(kk1)
+x.df <- mlds(SwapOrder(kk1))
 lik6pt(x.df, Get6pts(x.df))
 
 }
