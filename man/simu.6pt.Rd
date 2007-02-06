@@ -10,7 +10,7 @@ simu.6pt(obj, nsim = 1)
 }
 
 \arguments{
-  \item{obj}{object of class 'mlds'}
+  \item{obj}{object of class \sQuote{mlds}}
   \item{nsim}{ integer indicating number of bootstrap trials.}
 }
 

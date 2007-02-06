@@ -3,7 +3,7 @@
 
 \title{ Difference Scale default print statement}
 \description{
- This is the default print statement for a 'mlds' object.
+ This is the default print statement for a \sQuote{mlds} object.
  It displays the difference scale as a named vector, with the names corresponding to the stimulus levels and the value of \code{sigma}.
 }
 \usage{
@@ -11,7 +11,7 @@
 }
 
 \arguments{
-  \item{x}{an object of class 'mlds', typically from a call to \code{mlds}.}
+  \item{x}{an object of class \sQuote{mlds}, typically from a call to \code{mlds}.}
   \item{digits}{number of digits to display in the output. }
   \item{\dots}{ additional arguments to be passed to the default method. }
 }

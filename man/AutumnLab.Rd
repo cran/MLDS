@@ -3,7 +3,7 @@
 \docType{data}
 \title{Difference Scale Judgement Data Set}
 \description{
-  Judgements and stimulus ranks for one observer during one session from a difference scaling experiment.  On each trial, the observer is presented with 4 stimuli \eqn{(a, b, c, d)} from a physical scale with \eqn{a < b < c < d}.  The stimuli are presented as two pairs \eqn{(a, b)} and \eqn{(c, d)} and the observer judges between which pair the perceived difference is greater.  
+  Judgments and stimulus ranks for one observer during one session from a difference scaling experiment.  On each trial, the observer is presented with 4 stimuli \eqn{(a, b, c, d)} from a physical scale with \eqn{a < b < c < d}.  The stimuli are presented as two pairs \eqn{(a, b)} and \eqn{(c, d)} and the observer judges between which pair the perceived difference is greater.  
 }
 \usage{data(AutumnLab)}
 \format{

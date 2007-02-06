@@ -10,15 +10,15 @@ This function calculates the Akaike information criterion from the fitted model 
 }
 
 \arguments{
-  \item{object}{ an object of class 'mlds'. }
+  \item{object}{ an object of class \sQuote{mlds}. }
   \item{\dots}{not used for the moment}
-  \item{k}{numeric, the "penalty" per parameter to be used, the default \code{k = 2} is the classical AIC. }
+  \item{k}{numeric, the \dQuote{penalty} per parameter to be used, the default \code{k = 2} is the classical AIC. }
 }
 \details{
- The method depends on the \code{link{logLik.mlds}} method computing the log-likelihood for the 'mlds' class.  The smaller the AIC, the better the fit. The log-likelihood and hence the AIC is only defined up to an additive constant.  
+ The method depends on the \code{\link{logLik.mlds}} method computing the log-likelihood for the \sQuote{mlds} class.  The smaller the AIC, the better the fit. The log-likelihood and hence the AIC is only defined up to an additive constant.  
 }
 \value{
-  Returns a numeric value with the corresponding AIC (or BIC, or ..., depending on \code{k)}.  
+  Returns a numeric value with the corresponding AIC (or BIC, or \dots, depending on \code{k)}.  
   }
 \references{Sakamoto, Y., Ishiguro, M., and Kitagawa G. (1986). Akaike Information Criterion Statistics. D. Reidel Publishing Company. }
 \author{ Kenneth Knoblauch}

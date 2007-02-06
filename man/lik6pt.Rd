@@ -3,7 +3,7 @@
 
 \title{ Compute Log Likelihood for 6-point Test }
 \description{
-  The 6-point test evaluates the validity of the estimated difference scale.  Given 6 values, a, b, c, a', b', c', on the stimulus scale, if the pair \eqn{(a, b) > (a', b')} and \eqn{(b, c) > (b', c')} then it must be that \eqn{(a, c) > (a', c')}, where the symbol \eqn{>} is taken here to mean "is judged more different than". Given the observer's difference scale and \eqn{sigma} estimate, the likelihood of the choices made is calculated based on the link function indicated in the 'mlds' object.
+  The 6-point test evaluates the validity of the estimated difference scale.  Given 6 values, a, b, c, a', b', c', on the stimulus scale, if the pair \eqn{(a, b) > (a', b')} and \eqn{(b, c) > (b', c')} then it must be that \eqn{(a, c) > (a', c')}, where the symbol \eqn{>} is taken here to mean \dQuote{is judged more different than}. Given the observer's difference scale and \eqn{\sigma} estimate, the likelihood of the choices made is calculated based on the link function indicated in the \sQuote{mlds} object.
 }
 \usage{
 lik6pt(x, Six.Pts, ...)

@@ -5,7 +5,8 @@
  Runs a difference scaling experiment displaying stimuli with the function \code{DiplayTrial} defined by the function \code{DefineStimuli}.
  }
 \usage{
-runSampleExperiment(DisplayTrial, DefineStimuli, NumTrials = NULL, DisplaySize = 10, ...)
+runSampleExperiment(DisplayTrial, DefineStimuli, NumTrials = NULL,
+ 	DisplaySize = 10, ...)
 }
 \arguments{
   \item{DisplayTrial}{character giving the name of a function to display a trial with quadruple of stimuli.}
@@ -19,16 +20,20 @@ runSampleExperiment(DisplayTrial, DefineStimuli, NumTrials = NULL, DisplaySize =
  {see \code{\link{kk}}.}
  }
 \value{
- An object of class `mlds.df' is returned.  It inherits from
- `data.frame' and has attributes `stimulus' and `invord'.
+ An object of class \sQuote{mlds.df} is returned.  It inherits from \sQuote{data.frame} and has attributes \sQuote{stimulus} and \sQuote{invord}.
  See \code{\link{kk}} for an example.
  }
 \author{ Kenneth Knoblauch and Laurence T. Maloney }
 
 \examples{
 ##This will start a 330 trial interactive experiment
-\dontrun{runSampleExperiment("DisplayOneTrial", "DefineMyScale")}
+\dontrun{
+	runSampleExperiment("DisplayOneTrial", "DefineMyScale")
+	}
 ##This will run 10 trials of an interactive experiment
-\dontrun{runSampleExperiment("DisplayOneTrial", "DefineMyScale", NumTrials = 10)}
+\dontrun{
+	runSampleExperiment("DisplayOneTrial", 
+		"DefineMyScale", NumTrials = 10)
+	}
 }
 \keyword{misc}

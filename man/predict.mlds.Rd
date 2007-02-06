@@ -10,10 +10,10 @@
 }
 
 \arguments{
-  \item{object}{object of class 'mlds', typically from the output of \code{mlds}}
-  \item{newdata}{A data.frame or object of class 'mlds.df' with 5 columns, corresponding to the response at each trial and the ranks of the quadruple of stimuli presented.}
-  \item{type}{ character indicating scale on which predictions should be made, "link", the default, on the scale of the linear predictor or "response", on the response scale. }
-  \item{\dots}{ When \code{obj$method} = "glm", these are additional arguments passed to \code{predict.glm}. }
+  \item{object}{object of class \sQuote{mlds}, typically from the output of \code{mlds}}
+  \item{newdata}{A data.frame or object of class \sQuote{mlds.df} with 5 columns, corresponding to the response at each trial and the ranks of the quadruple of stimuli presented.}
+  \item{type}{ character indicating scale on which predictions should be made, \dQuote{link}, the default, on the scale of the linear predictor or \dQuote{response}, on the response scale. }
+  \item{\dots}{ When \code{obj$method} = \dQuote{glm}, these are additional arguments passed to \code{predict.glm}. }
 }
 \details{
   The \code{newdata} argument is needed principally for the 6-point test (see \code{\link{lik6pt}}), to extract the estimated probabilities for the subsets of the original data that form valid 6-point tests.

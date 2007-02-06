@@ -2,21 +2,21 @@
 \alias{Rbind}
 \title{ Concatenate Objects of Class 'mlds.df' by Row}
 \description{
- Concatenate the data.frame of 'mlds.df' objects by row
-and concatenate the 'invord' attributes, also. 
+ Concatenate the data.frame of \sQuote{mlds.df} objects by row
+and concatenate the \sQuote{invord} attributes, also. 
 }
 \usage{
 Rbind(...)
 }
 
 \arguments{
-  \item{\dots}{Objects of class mlds.df.}
+  \item{\dots}{Objects of class \sQuote{mlds.df}.}
 }
 \details{
-  Uses rbind.data.frame to concatenate the data.frame component of several mlds.df objects and then concatenates there 'invord' attributes, as well.  It would have been better to have an rbind method but since the objects inherit from class data.frame, this method would be called automatically and the 'invord' attribute would not be updated.
+  Uses \code{rbind.data.frame} to concatenate the data.frame component of several \sQuote{mlds.df} objects and then concatenates there \code{invord} attributes, as well.  It would have been better to have an rbind method but since the objects inherit from class data.frame, this method would be called automatically and the \code{invord} attribute would not be updated.
 }
 \value{
- An object of class 'mlds.df that is composed of data from several experiments. 
+ An object of class \sQuote{mlds.df} that is composed of data from several experiments. 
 }
 
 \author{Kenneth Knoblauch }

@@ -13,7 +13,7 @@ boot.mlds(x, nsim, ...)
   \item{\dots}{ Additional options passed along to the function \code{mlds}. }
 }
 \details{
-  Either the scale values (from `glm' method) or the scale values and \eqn{\sigma} (from `optim' method) permit the fitted probabilities to be estimated.  These are used to generate new responses to the quadruples using \code{rbinom}.  The new responses are then used with \code{mlds} to estimate a bootstrapped scale.  This is repeated \eqn{N} times and stored in the output with the mean and standard deviation of the bootstrapped scales.
+  Either the scale values (from \sQuote{glm} method) or the scale values and \eqn{\sigma} (from \sQuote{optim} method) permit the fitted probabilities to be estimated.  These are used to generate new responses to the quadruples using \code{rbinom}.  The new responses are then used with \code{mlds} to estimate a bootstrapped scale.  This is repeated \eqn{N} times and stored in the output with the mean and standard deviation of the bootstrapped scales.
 }
 \value{
 A list of 4 elements:  

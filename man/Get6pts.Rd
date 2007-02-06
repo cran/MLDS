@@ -9,7 +9,7 @@
 Get6pts(x, ...)
 }
 \arguments{
-  \item{x}{ an object of class \code{mlds}.}
+  \item{x}{ an object of class \sQuote{mlds}.}
   \item{\dots}{Possibility of sending additional arguments but currently unused.}
 }
 \details{

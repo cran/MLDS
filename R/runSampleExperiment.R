@@ -32,7 +32,7 @@ runSampleExperiment <- function(DisplayTrial, DefineStimuli,
 							height = DisplaySize),
 				windows = windows(width = DisplaySize, 
 					height = DisplaySize))
-	NT <- if (is.null(NumTrials)) seq(rnow(trial)) else
+	NT <- if (is.null(NumTrials)) seq(nrow(trial)) else
 			seq(NumTrials)
 	for (tr in NT) {
 		par(mfrow = c(2, 2))

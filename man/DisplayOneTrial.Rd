@@ -19,14 +19,14 @@ DefineMyScale(rr = c(seq(0, 0.9, len = 10), 0.98))
 \value{
 \code{DisplayOneTrial} is used for its side-effect of producing a stimulus on the display.  \code{DefineMyScale} outputs a numeric vector of the physical scale.  While its use here is quite trivial, in general, it permits the tailoring of the stimulus levels to the particular experiment.  In the present case, one could imagine, for example, modifying it so that successive levels were evenly spaced in \eqn{r^2} rather than \eqn{r}.
   }
-\references{ ~put references to the literature/web site here ~ }
+
 \author{Kenneth Knoblauch and Laurence T. Maloney}
 
 \seealso{ \code{\link{runSampleExperiment}} }
 \examples{
 
 \dontrun{runSampleExperiment(DisplayTrial = "DisplayOneTrial", 
-							DefineStimuli = "DefineMyScale")}
+		DefineStimuli = "DefineMyScale")}
 
 }
 \keyword{misc}

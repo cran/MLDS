@@ -3,19 +3,19 @@
 
 \title{ Compute Log-Likelihood for an mlds object}
 \description{
-  This function provides a method for extracting the log likelihood from an object of class \code{mlds}.
+  This function provides a method for extracting the log likelihood from an object of class \sQuote{mlds}.
 }
 \usage{
 \method{logLik}{mlds}(object, ...)
 }
 
 \arguments{
-  \item{object}{an object of class \code{mlds} typically from a call to \code{mlds}}
+  \item{object}{an object of class \sQuote{mlds} typically from a call to \code{mlds}}
   \item{\dots}{for passing additional parameters, but is currently not used. }
 }
 
 \value{
-An object of class \code{logLike} whose value is the logarithm of the likelihood with attribute \code{df} providing the degrees of freedom
+An object of class \sQuote{logLik} whose value is the logarithm of the likelihood with attribute \code{df} providing the degrees of freedom
 }
 \author{ Kenneth Knoblauch}
 

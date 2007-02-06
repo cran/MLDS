@@ -2,7 +2,7 @@
 \alias{ix.mat2df}
 \title{Transform data.frame back to Raw Difference Scale Format}
 \description{
- \code{ix.mat2df} converts a long data.frame that is used as the data argument for \code{mlds} with  method = "glm" to the 5 column format, typically from the results of a difference scaling experiment.  The first column is the response and the next four are the ranks of the stimulus levels used in each trial, the 2 pairs.  \code{ix.mat2df} is the inverse of \code{make.ix.mat}.  This form of data.frame is used with the "optim" method of \code{mlds}.
+ \code{ix.mat2df} converts a long data.frame that is used as the data argument for \code{mlds} with  method = \dQuote{glm} to the 5 column format, typically from the results of a difference scaling experiment.  The first column is the response and the next four are the ranks of the stimulus levels used in each trial, the 2 pairs.  \code{ix.mat2df} is the inverse of \code{make.ix.mat}.  This form of data.frame is used with the \dQuote{optim} method of \code{mlds}.
 }
 \usage{
 ix.mat2df(x)
@@ -17,7 +17,7 @@ ix.mat2df(x)
   \item{resp }{The response, 0 or 1, indicating which pair was chosen}
   \item{S1-S4 }{The rank of the 4 stimulus levels presented on each trial.}
 }
-\references{ ~put references to the literature/web site here ~ }
+
 \author{Kenneth Knoblauch}
 \note{ }
 \seealso{\code{\link{make.ix.mat}},  \code{\link{mlds}}}

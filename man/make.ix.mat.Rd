@@ -3,7 +3,7 @@
 
 \title{Create data.frame for Fitting Difference Scale by glm }
 \description{
-\code{make.ix.mat} generates a \eqn{n x p} matrix from the \eqn{n x 5} column storing the results of a difference scaling experiment, where \eqn{p} is the number of stimulus levels tested and \eqn{n} is the number of trials.  The first column is the response (0 or 1), and the \eqn{p - 1} succeeding columns code covariates for all but the first stimulus level, which is contrained to be 0. These columns take the value 0 unless the stimulus level was in the trial, in which case they take, in order, the values, 1, -1, -1, 1.
+\code{make.ix.mat} generates a \eqn{n x p} matrix from the \eqn{n x 5} column data.frame storing the results of a difference scaling experiment, where \eqn{p} is the number of stimulus levels tested and \eqn{n} is the number of trials.  The first column is the response (0 or 1), and the \eqn{p - 1} succeeding columns code covariates for all but the first stimulus level, which is contrained to be 0. These columns take the value 0 unless the stimulus level was in the trial, in which case they take, in order, the values, 1, -1, -1, 1.
 }
 \usage{
 make.ix.mat(data, xi = NULL, ...)
@@ -15,7 +15,7 @@ make.ix.mat(data, xi = NULL, ...)
   \item{\dots}{Other arguments, not used for the moment.}
 }
 \details{
-  To fit a difference scale using \code{mlds} and \code{method} = "glm", each stimulus level is treated as a covariate taking on the values 0, if it was not present in the trial, or -1 or 1, the latter two depending on the ordinal stimulus level within the trial.  This is a helper function to transform the typical 5 column data.frame from a difference scaling experiment, indicating the response and the 4 stimulus levels, to one in the format described above.  Matrices of this form can also be used as \code{newdata} for the predict method.  This is exploited in the function \code{like6pt}.  It is here that the argument \code{xi} is necessary since the data.frame for the first of the 6-point comparisons does not contain the highest level of the scale and so needs to be specified so that the data.frame conforms with that used to generate the \code{mlds} object.
+  To fit a difference scale using \code{mlds} and \code{method} = dQuote{glm}, each stimulus level is treated as a covariate taking on the values 0, if it was not present in the trial, or -1 or 1, the latter two depending on the ordinal stimulus level within the trial.  This is a helper function to transform the typical 5 column data.frame from a difference scaling experiment, indicating the response and the 4 stimulus levels, to one in the format described above.  Matrices of this form can also be used as \code{newdata} for the predict method.  This is exploited in the function \code{like6pt}.  It is here that the argument \code{xi} is necessary since the data.frame for the first of the 6-point comparisons does not contain the highest level of the scale and so needs to be specified so that the data.frame conforms with that used to generate the \sQuote{mlds} object.
 }
 \value{
  A data.frame with\eqn{n} rows and \eqn{p} columns.

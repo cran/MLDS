@@ -4,7 +4,7 @@
 
 \title{Summary for a mlds fit }
 \description{
-Takes a fitted 'mlds' object and produces a summary of it
+Takes a fitted \sQuote{mlds} object and produces a summary of it
 }
 \usage{
 \method{summary}{mlds}(object, digits = max(3, getOption("digits") - 4), ...)
@@ -13,20 +13,20 @@ Takes a fitted 'mlds' object and produces a summary of it
 }
 
 \arguments{
-  \item{object}{ an object of class 'mlds' typically produced by a call to \code{mlds}. }
+  \item{object}{ an object of class \sQuote{mlds} typically produced by a call to \code{mlds}. }
   \item{digits}{ The number of digits to display.}
-  \item{x }{An object of class 'summary.mlds'.}
+  \item{x }{An object of class \sQuote{summary.mlds}.}
   \item{\dots}{Addtional arguments passed to the default print method. Only effects the output of \code{pscale}.}
 }
 \details{
- Displays summary information from a 'mlds' object.
+ Displays summary information from a \sQuote{mlds} object.
 }
 \value{
 A list of 5 elements
   \item{pscale }{A named vector indicating the difference scale.  The names are the stimulus levels.}
-  \item{sigma }{The estimate of the scale parameter.  For method = "glm", this is always 1.}
+  \item{sigma }{The estimate of the scale parameter.  For method = \dQuote{glm}, this is always 1.}
  \item{logLik }{The logarithm of likelihood. }
- \item{method }{The fitting method used, either "glm" or "optim". }
+ \item{method }{The fitting method used, either \dQuote{glm} or \dQuote{optim}. }
  \item{link }{The link used for the binomial family. }
  Normally, \code{print.summary.mlds} is not meant to be called directly by the user.
  }
