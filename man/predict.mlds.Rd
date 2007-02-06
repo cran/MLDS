@@ -6,8 +6,7 @@
  Predict values based on difference scale fit. 
 }
 \usage{
-## S3 method for class 'mlds':
-predict.mlds(object, newdata = NULL, type = "link", ...)
+\method{predict}{mlds}(object, newdata = NULL, type = "link", ...)
 }
 
 \arguments{

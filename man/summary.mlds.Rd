@@ -7,11 +7,9 @@
 Takes a fitted 'mlds' object and produces a summary of it
 }
 \usage{
-## S3 method for class 'mlds':
-summary.mlds(object, digits = max(3, getOption("digits") - 4), ...)
+\method{summary}{mlds}(object, digits = max(3, getOption("digits") - 4), ...)
 
-## S3 method for class 'summary.mlds':
-print.summary.mlds(x, digits = max(3, getOption("digits") - 4), ...)
+\method{print}{summary.mlds}(x, digits = max(3, getOption("digits") - 4), ...)
 }
 
 \arguments{

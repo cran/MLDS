@@ -7,8 +7,7 @@
  It displays the difference scale as a named vector, with the names corresponding to the stimulus levels and the value of \code{sigma}.
 }
 \usage{
-## S3 method for class 'mlds':
-print.mlds(x, digits = max(3, getOption("digits") - 4), ...)
+\method{print}{mlds}(x, digits = max(3, getOption("digits") - 4), ...)
 }
 
 \arguments{

@@ -6,8 +6,7 @@
   \code{fitted.mlds} returns the fitted responses from an estimated difference scale obtained by \code{mlds}.
 }
 \usage{
-## S3 method for class 'mlds':
-fitted.mlds(object, ...)
+\method{fitted}{mlds}(object, ...)
 }
 
 

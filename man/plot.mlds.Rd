@@ -6,8 +6,7 @@
   Plots the difference scale as a function of stimulus level.
 }
 \usage{
-## S3 method for class 'mlds':
-plot.mlds(x, standard.scale = FALSE, ...)
+\method{plot}{mlds}(x, standard.scale = FALSE, ...)
 }
 
 \arguments{

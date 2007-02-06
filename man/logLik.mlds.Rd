@@ -6,8 +6,7 @@
   This function provides a method for extracting the log likelihood from an object of class \code{mlds}.
 }
 \usage{
-## S3 method for class 'mlds':
-logLik.mlds(object, ...)
+\method{logLik}{mlds}(object, ...)
 }
 
 \arguments{
