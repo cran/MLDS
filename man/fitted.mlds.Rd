@@ -25,7 +25,7 @@
 data(kk1)
 data(kk2)
 data(kk3)
-fitted(mlds(SwapOrder(Rbind(kk1, kk2, kk3))))
+fitted(mlds(SwapOrder(rbind(kk1, kk2, kk3))))
 }
 
 \keyword{ methods }
