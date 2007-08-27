@@ -12,5 +12,4 @@ S3method(predict, mlds)
 S3method(print, mlds)
 S3method(print, summary.mlds)
 S3method(summary, mlds)
-S3method(rbind, mlds.df)
 
