@@ -1,4 +1,4 @@
-binom.diagnostics <- function(obj, nsim = 200) #, alpha = 0.025){
+binom.diagnostics <- function(obj, nsim = 200, type = "deviance") 
 	{
 	n <- length(fitted(obj))
 	d <- ix.mat2df(obj$obj$data)
@@ -6,7 +6,7 @@ binom.diagnostics <- function(obj, nsim = 200) #, alpha = 0.025){
 		ys <- rbinom(n, 1, fitted(obj))
 		d$resp <- ys
 		br <- mlds(d)
-		rs <- residuals(br$obj)
+		rs <- residuals(br$obj, type = type)
 		rsd <- sort(rs)
 		fv.sort <- sort(fitted(br), index.return = TRUE)
 		rs <- rs[fv.sort$ix]
@@ -21,8 +21,8 @@ binom.diagnostics <- function(obj, nsim = 200) #, alpha = 0.025){
  		list(sapply(seq(1, length(res), 2), 
  		function(x) res[[x]]))))
  	fres$resid <- apply(fres$resid, 2, sort)
- 	fres$Obs.resid <- residuals(obj$ob)
-	rs <- residuals(obj$obj)
+ 	fres$Obs.resid <- residuals(obj$ob, type = type)
+	rs <- residuals(obj$obj, type = type)
 	fv.sort <- sort(fitted(obj), index.return = TRUE)
 	rs <- rs[fv.sort$ix]
 	rs <- rs > 0
@@ -35,7 +35,7 @@ binom.diagnostics <- function(obj, nsim = 200) #, alpha = 0.025){
 }
 
 plot.mlds.diag <- function(x, alpha = 0.025, 
-		breaks = "Sturges",...) {
+		breaks = "Sturges", ...) {
 	nsim <- dim(x$resid)[1]
 	n <- dim(x$resid)[2]
 	par(mfrow = c(1, 2))
@@ -46,8 +46,8 @@ plot.mlds.diag <- function(x, alpha = 0.025,
 			 col = "blue")
 	lines(x$resid[(1 - alpha) * nsim, ], (1:n-0.5)/n, 
 			 col = "blue")
-	hist(x$NumRuns, breaks = breaks,
-		xlab = "Number of Runs", main = "")
+	hist(x$NumRuns, xlab = "Number of Runs", main = "",
+		breaks = breaks)
 	abline(v = x$ObsRuns, lwd = 2)
 	invisible()
 }

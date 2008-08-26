@@ -1,4 +1,5 @@
-export(mlds, Get6pts, ix.mat2df, lik6pt, make.ix.mat,
+export(mlds, mlds.default, mlds.formula,
+	   Get6pts, ix.mat2df, lik6pt, make.ix.mat,
        pmc, simu.6pt, SwapOrder, runSampleExperiment,
 	DefineMyScale, DisplayOneTrial, boot.mlds, Rbind,
 	binom.diagnostics)

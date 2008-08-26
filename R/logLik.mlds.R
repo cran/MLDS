@@ -4,7 +4,9 @@ function(object, ...) {
 	if (object$method == "glm")
 		val <- logLik(object$obj) else
 		{ val <- object$logLik	
-		attr(val, "df") <- length(object$pscale) - 1
+		attr(val, "df") <- if(object$method == "optim")
+		 	length(object$pscale) - 1 else
+		 	length(object$par) + 1
 		class(val) <- "logLik"
 		}
     val

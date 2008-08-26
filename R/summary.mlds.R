@@ -8,9 +8,13 @@ function(object,
 	ans$pscale <- z$pscale
 	names(ans$pscale) <- z$stimulus
 	ans$sigma <- z$sigma
-	if (z$method == "optim") ans$logLik <- z$logLik else
-		ans$logLik <- logLik(z$obj)[1]
+	ans$logLik <- if (z$method %in% c("optim", "formula" )) 
+		z$logLik else
+		logLik(z$obj)[1]
 	ans$method <- z$method
+	if(z$method == "formula") {
+		ans$formula <- z$formula
+		ans$pars = z$par}
 	ans$link <- z$link
 	class(ans) <- "summary.mlds"
 	ans

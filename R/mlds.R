@@ -1,9 +1,14 @@
-`mlds` <- 
-function(data, stimulus = NULL, method = "glm",
+`mlds` <- function(x, ...) 
+	UseMethod("mlds")
+
+
+`mlds.default` <- 
+function(x, stimulus = NULL, method = "glm",
 			lnk = "probit", opt.meth = "BFGS", 
 			opt.init = NULL, control = glm.control(maxit = 50000,
 				epsilon = 1e-14), ...
 			) {
+	data <- x
 #data, data.frame from diff scale exp.
 #stimulus, physical levels
 	if (missing(stimulus)) {
@@ -79,3 +84,57 @@ diff.sc <- function(n, s, d) {
 class(psc.lst) <- "mlds"
 psc.lst			
 } 			
+
+`mlds.formula` <- 
+function(x, p, data, stimulus = NULL, 
+			lnk = "probit", opt.meth = "BFGS", 
+			control = list(maxit = 50000,
+				reltol = 1e-14), ...
+			) {
+	form <- x
+	Form2fun <-   function(f, p = quote(p)) {
+		xx <- all.vars(f)
+		fp  <- match(p, xx)
+		xx <- c(xx[fp], xx[-fp])
+		ff <- vector("list", length(xx))
+		names(ff) <- xx
+		ff[[length(ff) + 1]] <- f[[2]]
+		as.function(ff, parent.frame())
+	}
+	d <- data
+	sx <- if (missing(stimulus)) {
+		if (inherits(d, "mlds.df")) {
+			attr(d, "stimulus")
+			} else
+		{seq(max(d))}
+		} else stimulus	
+	
+	diff.err <- function(parm, ff, sx) {
+	#compute likelihood w/ f(p)	, p includes s as last param
+		s <- parm[length(parm)]
+		px <- parm[-length(parm)]
+		del <- matrix(ff(px, sx[unlist(d[, -d$resp])]), 
+			ncol = 4) %*% c(1, -1, -1, 1)
+		z <- del/s			
+		fam <- binomial(link = lnk)
+		p <- fam$linkinv(z)
+		p[p < .Machine$double.eps] <- .Machine$double.eps
+		p[p > (1 - .Machine$double.eps)] <- 1 -.Machine$double.eps
+
+		-sum(log(p[d$resp == 1]), na.rm = TRUE) -
+			sum(log(1 - (p[d$resp == 0])), na.rm = TRUE)	}
+	f <- Form2fun(form, expression(p))
+	res <- optim(p, diff.err, hessian = TRUE, method = "BFGS",
+	 		control = control, ff = f, sx = sx)
+	pscale <- f(res$par[-length(res$par)], sx)	
+	pscale <- (pscale - pscale[1])/(pscale[length(pscale)] - pscale[1])
+	psc <- list(pscale = pscale, stimulus = sx, 
+		sigma = res$par[length(res$par)],
+		par = res$par[-length(res$par)],
+		logLik = -res$value, hess = res$hessian,
+		method = "formula", link = lnk, data = d,
+		conv = res$convergence,	formula = form,
+		func = f)
+	class(psc) <- "mlds"
+	psc
+}

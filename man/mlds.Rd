@@ -1,19 +1,28 @@
 \name{mlds}
 \alias{mlds}
+\alias{mlds.default}
+\alias{mlds.formula}
 
 \title{Fit Difference Scale by Maximum Likelihood }
-\description{
- \code{mlds} fits the results of a difference scaling experiment using either \code{glm} (Generalized Linear Model) or by direct maximization of the likelihood using \code{optim}.
+\description{ Generic function  \code{mlds} uses different methods to fit the results of a difference scaling experiment either using \code{glm} (Generalized Linear Model), by direct maximization of the likelihood using \code{optim} or by maximizing the likelihood with respect to a function of the stimulus dimension specified by a one sided formula.
 }
 \usage{
-mlds(data, stimulus, method = "glm", lnk = "probit", 
-		opt.meth = "BFGS", opt.init = NULL, 
-		control = glm.control(maxit = 50000, epsilon = 1e-14),
-		... )
+mlds(x, ...)
+
+\method{mlds}{default}(x, stimulus = NULL, method = "glm", 
+	lnk = "probit", opt.meth = "BFGS", opt.init = NULL, 
+	control = glm.control(maxit = 50000, epsilon = 1e-14), 
+	... )
+
+\method{mlds}{formula}(x, p, data, stimulus = NULL, 
+	lnk = "probit", opt.meth = "BFGS", 
+	control = list(maxit = 50000, reltol = 1e-14), ... )
 }
 
 \arguments{
-  \item{data}{ A data.frame with 5 columns giving the response and the ranks of the stimulus levels for each trial, or an object of class \sQuote{mlds.df} which also contains additional information as attributes .}
+	\item{x}{When the \code{method} is specified as \sQuote{glm} or \sQuote{optim} a data frame with 5 columns giving the response and the ranks of the stimulus levels for each trial, or an object of class \sQuote{mlds.df} which also contains additional information as attributes. It can also be a one-side formula with parameters \code{p} and stimulus variable \code{sx} that gives a parametric formula to fit to the data for the \code{formula} method.}
+  \item{data}{ A data. frame with 5 columns giving the response and the ranks of the stimulus levels for each trial, or an object of class \sQuote{mlds.df} which also contains additional information as attributes, required when the \sQuote{formula} method is used.}
+  \item{p}{numeric vector of parameters of length one greater than the number of parameters in the \code{formula} argument that specifies initial values for the parameters.  The extra parameter, specified last, is the initial estimate of \code{sigma}. }
   \item{stimulus}{A numeric vector that contains the physical stimulus levels used in the experiment.  If \code{data} is of class \sQuote{mlds.df}, this information is included as an attribute.  If \code{NULL}, a sequence of 1-n is used, where n is the number of stimulus levels, deduced from the highest rank in \code{data}. }
   \item{method}{ Character, taking the value of \dQuote{glm} or \dQuote{optim}.  Default is \dQuote{glm}. }
   \item{lnk}{Character indicating either one of the built-in links for the binomial family or a user defined link of class \sQuote{link-glm}.  See \code{\link{family}} and \code{\link{make.link}}. Default is \dQuote{probit}.}
@@ -30,17 +39,20 @@ If there are \eqn{p} stimulus levels tested, then \eqn{p - 1} coefficients are e
 where \eqn{\sigma_o} is \code{\sigma} estimated with the \dQuote{optim} method and \eqn{Psi_g} corresponds to the perceptual scale values estimated with the \dQuote{glm} method.  The equality may not be exact as the \dQuote{optim} method prevents the selection of values outside of the interval [0, 1] whereas the \dQuote{glm} method does not.
 }
 \value{
-A list of class 'mlds' whose components depend on whether the method was "glm" or "optim", 
+A list of class \sQuote{mlds} whose components depend on whether the method was specified as \sQuote{glm}, \sQuote{optim} with the default method, or the formula method was used,
   \item{pscale }{A numeric vector of the estimated difference scale.}
   \item{stimulus }{The physical stimulus levels}
-   \item{sigma }{The scale estimate, always 1.0 for "glm"}
+   \item{sigma }{The scale estimate, always 1.0 for \sQuote{glm}}
     \item{method }{The fitting method}
-     \item{link }{The binomial link specified, default "probit"}
-      \item{obj }{For method "glm", an object of class "glm" resulting from the fit.}
-  \item{logLik }{for method "optim", the logarithm of likelihood at convergence}
-     \item{hess }{for method "optim", the Hessian matrix at convergence}
-      \item{data }{For method "optim", the data.frame or "mlds.df" entered as an argument.}
-      \item{conv }{For method "optim", a code indicating whether \code{optim} converged or not.  See \code{\link{optim}}.}
+     \item{link }{The binomial link specified, default \sQuote{probit}}
+      \item{obj }{For method \sQuote{glm}, an object of class \sQuote{glm} resulting from the fit.}
+  \item{logLik }{for method \sQuote{optim}, the logarithm of likelihood at convergence}
+     \item{hess }{for method \sQuote{optim}, the Hessian matrix at convergence}
+      \item{data }{For method\sQuote{optim}, the data.frame or \sQuote{mlds.df} entered as an argument.}
+      \item{conv }{For method \sQuote{optim}, a code indicating whether \code{optim} converged or not.  See \code{\link{optim}}.}
+   \item{par}{For \sQuote{formula} method, the parameters estimated.}
+   \item{formula}{The one-sided formula specified with the \sQuote{method}.}
+   \item{func}{For \sQuote{formula} method, a function obtained from the one-sided \code{formula}.}
 }
 \references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5. }
 \author{Kenneth Knoblauch and Laurence T. Maloney}
@@ -58,6 +70,13 @@ summary(y.mlds)
 plot(x.mlds)
 #How sigma relates the scales obtained by the 2 different methods.
 lines(y.mlds$stimulus,  y.mlds$pscale/y.mlds$sigma)
+#An example using the formula method
+data(kk1)
+# with one parameter
+kk.frm1 <- mlds(~ sx^p, p = c(3, 0.02), data = kk1)
+# with two parameters
+kk.frm2 <- mlds(~p[1] * (sx + abs(sx - p[2])) - p[1] * p[2], 
+	p = c(0.9, 0.3, 0.2), data = kk1)
 }
 \keyword{models}
 \keyword{regression}
