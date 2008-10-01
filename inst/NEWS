@@ -3,3 +3,8 @@ version 0.1-2
 
   made mlds generic and added default (for glm and optim) and formula
   methods.  The formula method uses optim.
+
+version 0.1-3
+
+  added function df2mlds.df to coerce data frame from results to
+  object of class mlds.df with appropriate attributes
