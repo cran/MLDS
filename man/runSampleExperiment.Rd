@@ -6,7 +6,7 @@
  }
 \usage{
 runSampleExperiment(DisplayTrial, DefineStimuli, NumTrials = NULL,
- 	DisplaySize = 10, ...)
+ 	DisplaySize = 7.5, ...)
 }
 \arguments{
   \item{DisplayTrial}{character giving the name of a function to display a trial with quadruple of stimuli.}

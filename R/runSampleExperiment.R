@@ -3,10 +3,10 @@ DefineMyScale <- function(rr = c(seq(0, 0.9, len = 10), 0.98)) {
 			rr
 			}
 			
-DisplayOneTrial <- function(rr, N = 100, ptSize = 1) {
+DisplayOneTrial <- function(rr, PntNum = 100, ptSize = 1) {
 	for (ix in 4:1) {
 		covm <- matrix(c(1, rep(rr[ix], 2), 1), 2, 2)
-		xy <- MASS:::mvrnorm(n = N, rep(0, 2), covm, 
+		xy <- MASS:::mvrnorm(n = PntNum, rep(0, 2), covm, 
 				empirical = TRUE)
 		plot(xy, axes = FALSE, xlab = "", ylab = "", pty = "s",
 			cex = ptSize, pch = 16, col = "black",
@@ -15,7 +15,7 @@ DisplayOneTrial <- function(rr, N = 100, ptSize = 1) {
 			}
 
 runSampleExperiment <- function(DisplayTrial, DefineStimuli, 
-		NumTrials = NULL, DisplaySize = 10, ...) {
+		NumTrials = NULL, DisplaySize = 7.5, ...) {
 	cat("Four stimuli are presented on each trial \n")
 	cat("If you perceive a greater difference between  \n")
 	cat("  the lower two than the upper two, enter a 1. \n")

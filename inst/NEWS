@@ -8,3 +8,10 @@ version 0.1-3
 
   added function df2mlds.df to coerce data frame from results to
   object of class mlds.df with appropriate attributes
+
+version 0.1-5
+
+  modified default DisplaySize in runSampleExperiment
+  
+  Changed argument N to PntNum in DisplayOneTrial to avoid name
+  conflicts due to partial matching
