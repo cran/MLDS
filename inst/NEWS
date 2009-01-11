@@ -15,3 +15,18 @@ version 0.1-5
   
   Changed argument N to PntNum in DisplayOneTrial to avoid name
   conflicts due to partial matching
+
+version 0.1-6
+
+  modified LazyData yes
+
+  added aspect argument to runSampleExperiment for controlling
+  aspect ratio of graphic display
+
+  graphic display in runSampleExperiment now opens using dev.new
+  for better platform independence
+
+  added xlim and ylim arguments to DisplayOneTrial for controlling
+  size of displayed scatterplots
+
+  fixed some unmatched braces in Rd files

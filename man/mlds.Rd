@@ -28,7 +28,7 @@ mlds(x, ...)
   \item{lnk}{Character indicating either one of the built-in links for the binomial family or a user defined link of class \sQuote{link-glm}.  See \code{\link{family}} and \code{\link{make.link}}. Default is \dQuote{probit}.}
   \item{opt.meth}{If \code{method} = \dQuote{optim}, the method used by \code{optim} can be specified.  Defaults to \dQuote{BFGS}.}
   \item{opt.init}{Vector of numeric giving initial values which must be provided if you specify the \dQuote{optim} method.}
-  \item{control}{ A list of control values for either \code{glm} or \code{optim}.  Since the \code{method} defaults to dQuote{glm}, the default is a glm list but should be changed if the dQuote{optim} method is chosen.}
+  \item{control}{ A list of control values for either \code{glm} or \code{optim}.  Since the \code{method} defaults to \dQuote{glm}, the default is a glm list but should be changed if the \dQuote{optim} method is chosen.}
 \item{...}{Additional arguments passed along to \code{glm} or \code{optim.}
 	}
 }

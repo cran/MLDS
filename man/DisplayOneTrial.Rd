@@ -6,14 +6,16 @@
  These functions are required by \code{runSampleExperiment} to define and display trials.  They are provided as examples, and users are expected to define their own functions to define and display stimuli for estimating difference scales along other physical continua.  \code{DefineMyScale} returns a numeric vector providing the physical levels to be tested (here values of \eqn{r}).  \code{DisplayOneTrial} produces a 2 x 2 graphic of four scatterplots. 
 }
 \usage{
-DisplayOneTrial(rr, PntNum = 100, ptSize = 1)
+DisplayOneTrial(rr, PntNum = 100, ptSize = 1, 
+	xlim = c(-4, 4), ylim = c(-4, 4))
 DefineMyScale(rr = c(seq(0, 0.9, len = 10), 0.98))
 }
 
 \arguments{
   \item{rr}{vector of numeric or integer.  For \code{DisplayOneTrial}, a four element vector of integers, providing the indices of the physical scale values to be displayed.  For \code{DefineMyScale}, a numeric vector, providing the physical scale values to be tested.}
   \item{PntNum}{numeric giving the number of points to be displayed in each subgraphic.}
-  \item{ptSize}{numeric indicating the size of the points in each graphic, passed to the \code{cex} argument of \code{plot}. }
+  \item{ptSize}{numeric indicating the size of the points in each graphic, passed to the \code{cex} argument of \code{plot}.}
+  \item{xlim, ylim}{2-element numerics to determine range of values plotted on the display.}
 }
 
 \value{
