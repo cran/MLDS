@@ -30,3 +30,11 @@ version 0.1-6
   size of displayed scatterplots
 
   fixed some unmatched braces in Rd files
+
+version 0.1-7
+
+  added as.mlds.df S3 generic
+
+  changed df2mlds.df and ix.mat2df to as.mlds.df.data.frame 
+  and deprecated both of the former functions.
+

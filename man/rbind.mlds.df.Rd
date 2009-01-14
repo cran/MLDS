@@ -16,7 +16,7 @@ Rbind(...)
   }
  \details{
   Uses \code{rbind.data.frame} to concatenate the data.frame component of several \sQuote{mlds.df} objects and then concatenates there \code{invord} attributes, as well.  
-  \code{Rbind} will work, too, but is depracated.
+  \code{Rbind} will work, too, but is deprecated.
 }
 \value{
  An object of class \sQuote{mlds.df} that is composed of data from several experiments. }

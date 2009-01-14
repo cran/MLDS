@@ -1,7 +1,7 @@
 binom.diagnostics <- function(obj, nsim = 200, type = "deviance") 
 	{
 	n <- length(fitted(obj))
-	d <- ix.mat2df(obj$obj$data)
+	d <- as.mlds.df(obj$obj$data)
 	res <- sapply(seq_len(nsim), function(x, obj){
 		ys <- rbinom(n, 1, fitted(obj))
 		d$resp <- ys

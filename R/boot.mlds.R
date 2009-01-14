@@ -1,6 +1,6 @@
 `boot.mlds` <- function(x, nsim,  ...) {
 	d <- if (x$method == "glm") 
-				ix.mat2df(x$obj$data) else
+				as.mlds.df(x$obj$data) else
 				x$data
 	p <- fitted(x)
 	rsim <- matrix(rbinom(length(p) * nsim, 1, p), 

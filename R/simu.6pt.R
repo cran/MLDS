@@ -1,7 +1,7 @@
 `simu.6pt` <-
 function(obj, nsim = 1) {
 	dd <- if (obj$method == "glm") 
-		ix.mat2df(obj$obj$data) else
+		as.mlds.df(obj$obj$data) else
 		obj$data
 	sigma <- obj$sigma
 # calculate likelihood by 6-point test

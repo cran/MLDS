@@ -2,7 +2,8 @@ export(mlds, mlds.default, mlds.formula,
 	   Get6pts, ix.mat2df, lik6pt, make.ix.mat,
        pmc, simu.6pt, SwapOrder, runSampleExperiment,
 	DefineMyScale, DisplayOneTrial, boot.mlds, Rbind,
-	binom.diagnostics, df2mlds.df)
+	binom.diagnostics, df2mlds.df, as.mlds.df,
+	as.mlds.df.data.frame)
 
 S3method(AIC, mlds)
 S3method(fitted, mlds)
@@ -16,4 +17,4 @@ S3method(print, summary.mlds)
 S3method(summary, mlds)
 S3method(rbind, mlds.df)
 S3method(plot, mlds.diag)
-
+S3method(as.mlds.df, data.frame)

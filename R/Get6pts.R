@@ -9,7 +9,7 @@ function(x, ...) {
 	fl <- fl[fc, ] # all 6-tuples w/ a1 < a2
 
 	if (x$method == "glm") {
-		dd <- ix.mat2df(x$obj$data)
+		dd <- as.mlds.df(x$obj$data)
 		} else
 	{ dd <- x$data }
 	
