@@ -25,6 +25,10 @@ Three data sets for one subject in a sample difference scaling experiment. The s
 \details{ The datasets were generated on three separate days using the function
 	\code{runSampleExperiment} with \code{DisplayOneTrial} and \code{DefineMyScale} to define the stimuli and display them, anti-respectively.  The experiments were run on a Macintosh Pro with a 15 inch screen.  The observer was seated about 40 cm from the screen.
 }
+\references{
+Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference scaling in R. 
+\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \url{http://www.jstatsoft.org/v25/i02}.
+}
 
 \examples{
 data(kk1)

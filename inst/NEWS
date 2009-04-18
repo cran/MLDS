@@ -38,3 +38,13 @@ version 0.1-7
   changed df2mlds.df and ix.mat2df to as.mlds.df.data.frame 
   and deprecated both of the former functions.
 
+version 0.1-8
+
+  modified boot.mlds to use glm.fit so about 2x faster
+
+  fixed unmatched parenthesis in mlds.Rd
+
+  fixed bug in runSampleExperiment in which program bombs if observer
+  enters a carriage return instead of a number
+
+  made runSampleExperiment not bomb if observer enters arbitrary character

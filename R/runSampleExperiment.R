@@ -49,19 +49,22 @@ runSampleExperiment <- function(DisplayTrial, DefineStimuli,
 				list(stim[trial[tr, ]], ...))
 		cat("\n", tr, "\nEnter 1 (Lower) or 2 (Upper) Pair: ", "\n")
         ii <- 0
-       while (!(resp[tr] %in% 0:2)) {
-       			if (ii > 0) print ("Enter only 1, 2 or 0 to quit")
-        	 	resp[tr] <- scan(n = 1)
-        	 	ii <- ii + 1
-        	 	resp[tr] }
-        if (resp[tr] == 0) break
-#		cat("\n", tr,  "\nLower or Upper Pair (1, 2): ", "\n")
-#		resp[tr] <- scan(n = 1)
+      
+       while (!(resp[tr] %in% c("0", "1", "2"))) {
+       	x <- character(0)
+       	if (ii > 0) 
+       		print ("Enter only 1, 2 or 0 to quit")
+       	while(length(x) == 0) 
+       			x <- scan(what = character(0), n = 1)
+        	resp[tr] <- x 
+        	ii <- ii + 1
+        	resp[tr] }
+        if (resp[tr] == "0") break
 	}
 	graphics.off()
 
 #Save output in results as mlds.df
-	resp <- resp - 1 
+	resp <- as.integer(resp) - 1 
 	results <- data.frame(resp = resp, stim = trial)
 	results <- as.data.frame(lapply(results, as.integer))
 	names(results) <- c("resp", paste("S", 1:4, sep = ""))
