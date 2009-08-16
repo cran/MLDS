@@ -21,7 +21,11 @@ simu.6pt(obj, nsim = 1)
   \item{p }{proportion of simulations on which the simulated log likelihood was higher than that obtained from the original sample.}
   \item{N }{numeric indicating the number of simulations.  It should be the length of \code{boot.samp}.}
   }
-\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5. }
+\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5. 
+	
+Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference scaling in R. 
+\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \url{http://www.jstatsoft.org/v25/i02}.
+}
 \author{Kenneth Knoblauch and Laurence T. Maloney}
 
 \seealso{\code{\link{mlds}}, \code{\link{lik6pt}}}

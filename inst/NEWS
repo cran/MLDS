@@ -48,3 +48,15 @@ version 0.1-8
   enters a carriage return instead of a number
 
   made runSampleExperiment not bomb if observer enters arbitrary character
+
+version 0.2-0
+
+  fixed warnings in mlds.Rd
+
+  eliminated AIC method, relying on default (suggested by Achim Zeileis)
+
+  fixed some non ASCII text in Rd files
+
+  added coef and vcov methods for object of class mlds
+
+  

@@ -5,7 +5,8 @@ export(mlds, mlds.default, mlds.formula,
 	binom.diagnostics, df2mlds.df, as.mlds.df,
 	as.mlds.df.data.frame)
 
-S3method(AIC, mlds)
+#S3method(AIC, mlds)
+S3method(coef, mlds)
 S3method(fitted, mlds)
 S3method(lines, mlds)
 S3method(logLik, mlds)
@@ -13,6 +14,7 @@ S3method(plot, mlds)
 S3method(points, mlds)
 S3method(predict, mlds)
 S3method(print, mlds)
+S3method(vcov, mlds)
 S3method(print, summary.mlds)
 S3method(summary, mlds)
 S3method(rbind, mlds.df)
