@@ -19,7 +19,6 @@ ix.mat2df(d)
 }
 
 \author{Kenneth Knoblauch}
-\note{ }
 \seealso{\code{\link{make.ix.mat}},  \code{\link{mlds}}}
 \examples{
 	

@@ -59,4 +59,7 @@ version 0.2-0
 
   added coef and vcov methods for object of class mlds
 
+version 0.2-1
+
+  Fixed some Rd files that were giving warnings
   

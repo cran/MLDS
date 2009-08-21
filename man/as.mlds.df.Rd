@@ -18,7 +18,6 @@ as.mlds.df(d, ...)
 
 df2mlds.df(d, st)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{d}{ a 5 column data frame from an MLDS experiment, with one column of responses followed by four indicating the indices of the stimuli from each trial or a data frame of > 5 columns with the response in the first column and the covariates (signed indicator variables) for the stimuli of each trial in the rest of the columns }
   \item{st}{numeric indicating the stimulus levels from the MLDS experiment }
@@ -36,9 +35,5 @@ df2mlds.df(d, st)
 \note{ If the scale starts at 0, then 1 should be added to each scale value because the scale values will be used as indices and \code{R} indices start at 1, not 0.
 }
 \seealso{\code{\link{mlds}} }
-\examples{
-  
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+
 \keyword{manip}
