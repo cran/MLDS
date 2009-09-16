@@ -1,5 +1,6 @@
 \name{predict.mlds}
 \alias{predict.mlds}
+\alias{predict.mlbs}
 
 \title{Predict method for MLDS Fits }
 \description{
@@ -7,11 +8,13 @@
 }
 \usage{
 \method{predict}{mlds}(object, newdata = NULL, type = "link", ...)
+
+\method{predict}{mlbs}(object, newdata = NULL, type = "link", ...)
 }
 
 \arguments{
-  \item{object}{object of class \sQuote{mlds}, typically from the output of \code{mlds}}
-  \item{newdata}{A data.frame or object of class \sQuote{mlds.df} with 5 columns, corresponding to the response at each trial and the ranks of the quadruple of stimuli presented.}
+  \item{object}{object of class \sQuote{mlds} or  \sQuote{mlbs}, typically from the output of \code{mlds}}
+  \item{newdata}{A data.frame or object of class \sQuote{mlbs.df} with 4 columns or \sQuote{mlds.df} with 5 columns, corresponding to the response at each trial and the ranks of, respectively, the triple or quadruple of stimuli presented.}
   \item{type}{ character indicating scale on which predictions should be made, \dQuote{link}, the default, on the scale of the linear predictor or \dQuote{response}, on the response scale. }
   \item{\dots}{ When \code{obj$method} = \dQuote{glm}, these are additional arguments passed to \code{predict.glm}. }
 }

@@ -3,7 +3,7 @@ DefineMyScale <- function(rr = c(seq(0, 0.9, len = 10), 0.98)) {
 			rr
 			}
 			
-DisplayOneTrial <- function(rr, PntNum = 100, ptSize = 1, 
+DisplayOneQuad <- function(rr, PntNum = 100, ptSize = 1, 
 	xlim = c(-4, 4), ylim = c(-4, 4)) {
 	for (ix in 4:1) {
 		covm <- matrix(c(1, rep(rr[ix], 2), 1), 2, 2)
@@ -15,7 +15,7 @@ DisplayOneTrial <- function(rr, PntNum = 100, ptSize = 1,
 	}
 			}
 
-runSampleExperiment <- function(DisplayTrial, DefineStimuli, 
+runQuadExperiment <- function(DisplayTrial, DefineStimuli, 
 		NumTrials = NULL, DisplaySize = 7.5, aspect = 1, ...) {
 	cat("Four stimuli are presented on each trial \n")
 	cat("If you perceive a greater difference between  \n")

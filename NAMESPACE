@@ -1,22 +1,46 @@
-export(mlds, mlds.default, mlds.formula,
+export(mlds, mlds.mlds.df, mlds.mlbs.df, mlds.formula,
 	   Get6pts, ix.mat2df, lik6pt, make.ix.mat,
-       pmc, simu.6pt, SwapOrder, runSampleExperiment,
-	DefineMyScale, DisplayOneTrial, boot.mlds, Rbind,
-	binom.diagnostics, df2mlds.df, as.mlds.df,
-	as.mlds.df.data.frame)
+       pmc, simu.6pt, SwapOrder, runQuadExperiment,
+       runTriadExperiment, DefineMyScale, 
+       DisplayOneQuad, DisplayOneTriad,
+        boot.mlds, boot.mlbs, Rbind,
+	binom.diagnostics, df2mlds.df,
+	as.mlds.df, as.mlbs.df
+	)
 
 #S3method(AIC, mlds)
-S3method(coef, mlds)
-S3method(fitted, mlds)
-S3method(lines, mlds)
-S3method(logLik, mlds)
-S3method(plot, mlds)
-S3method(points, mlds)
-S3method(predict, mlds)
-S3method(print, mlds)
-S3method(vcov, mlds)
-S3method(print, summary.mlds)
-S3method(summary, mlds)
-S3method(rbind, mlds.df)
-S3method(plot, mlds.diag)
+#S3method(as, mlds.df)
+#S3method(as, mlbs.df)
 S3method(as.mlds.df, data.frame)
+S3method(as.mlbs.df, data.frame)
+S3method(coef, mlds)
+S3method(coef, mlbs)
+S3method(fitted, mlds)
+S3method(fitted, mlbs)
+S3method(lines, mlds)
+S3method(lines, mlbs)
+S3method(logLik, mlds)
+S3method(logLik, mlbs)
+S3method(mlds, data.frame)
+S3method(mlds, mlds.df)
+S3method(mlds, mlbs.df)
+S3method(mlds, formula)
+S3method(plot, mlds)
+S3method(plot, mlbs)
+S3method(points, mlds)
+S3method(points, mlbs)
+S3method(predict, mlds)
+S3method(predict, mlbs)
+S3method(print, mlds)
+S3method(print, mlbs)
+S3method(vcov, mlds)
+S3method(vcov, mlbs)
+S3method(print, summary.mlds)
+S3method(print, summary.mlbs)
+S3method(summary, mlds)
+S3method(summary, mlbs)
+S3method(rbind, mlds.df)
+S3method(rbind, mlbs.df)
+S3method(plot, mlds.diag)
+
+

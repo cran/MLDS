@@ -1,17 +1,20 @@
 \name{print.mlds}
 \alias{print.mlds}
+\alias{print.mlbs}
 
 \title{ Difference Scale default print statement}
 \description{
- This is the default print statement for a \sQuote{mlds} object.
+ This is the default print statement for a \sQuote{mlbs} or \sQuote{mlds} object.
  It displays the difference scale as a named vector, with the names corresponding to the stimulus levels and the value of \code{sigma}.
 }
 \usage{
 \method{print}{mlds}(x, digits = max(3, getOption("digits") - 4), ...)
+
+\method{print}{mlbs}(x, digits = max(3, getOption("digits") - 4), ...)
 }
 
 \arguments{
-  \item{x}{an object of class \sQuote{mlds}, typically from a call to \code{mlds}.}
+  \item{x}{an object of class \sQuote{mlbs} or \sQuote{mlds}, typically from a call to \code{mlds}.}
   \item{digits}{number of digits to display in the output. }
   \item{\dots}{ additional arguments to be passed to the default method. }
 }

@@ -28,3 +28,14 @@ function(object, newdata = NULL,
 	 as.vector(ans)
 	}
 
+`predict.mlbs`  <- function (object, newdata = NULL, type = "link", ...) {
+	miss <- missing(newdata)
+	if (miss) {
+            ans <- predict(object$obj, type = type, ...)
+        }
+        else {
+            ans <- predict(object$obj, newdata = newdata, type = type, 
+                ...)
+        }
+	as.vector(ans)
+}

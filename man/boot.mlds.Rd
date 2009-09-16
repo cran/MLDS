@@ -1,14 +1,16 @@
 \name{boot.mlds}
 \alias{boot.mlds}
+\alias{boot.mlbs}
 \title{ Resampling of an Estimated Difference Scale }
 \description{
  Using the \code{fitted} responses (probabilities) to the difference scale, new responses are generated which permit new bootstrap replications of estimated scales to be generated. The mean scale is useful for evaluating bias and the standard deviation for estimating standard errors of the scale values. 
 }
 \usage{
 boot.mlds(x, nsim, ...)
+boot.mlbs(x, nsim, ...)
 }
 \arguments{
-  \item{x}{ an object of class `mlds'.}
+  \item{x}{ an object of class \sQuote{mlds} or \sQuote{mlbs} depending on which function is called.}
   \item{nsim}{ an integer, the number of simulations. }
   \item{\dots}{ Additional options passed along to the function \code{mlds}. }
 }
@@ -17,9 +19,9 @@ boot.mlds(x, nsim, ...)
 }
 \value{
 A list of 4 elements:  
-  \item{boot.samp }{A \eqn{p} x \eqn{N} matrix of the bootstrap samples of the scale, where p is the number of scale values and N is the number of simulations.  }
-  \item{bt.mean }{A vector of length \eqn{p} giving the mean of the bootstrap scales.}
-  \item{bt.sd }{A vector of length \eqn{p} giving the standard deviation of the boostrap scales. }
+  \item{boot.samp }{A \eqn{p + 1} x \eqn{N} matrix of the bootstrap samples of the scale, where p is the number of scale values and N is the number of simulations. The extra value is the bootstrapped \eqn{sigma} value.  }
+  \item{bt.mean }{A vector of length \eqn{p + 1} giving the mean of the bootstrap scales.}
+  \item{bt.sd }{A vector of length \eqn{p + 1} giving the standard deviation of the boostrap scales. }
   \item{N }{The number of bootstrap simulations.}
   
 }

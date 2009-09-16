@@ -2,8 +2,8 @@
 function(x, ...) {
 # proportion of trials misclassified by observer
 #  w/ respect to estimated scale
-	if (class(x) != "mlds")
-		stop("x must be of class mlds")
+	if (!(class(x) %in% c("mlds", "mlbs")))
+		stop("x must be of class mlds or mlbs")
 	pred <- predict(x)
 	if (x$method == "glm") 
 		resp <- x$obj$data$resp else

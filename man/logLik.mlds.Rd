@@ -1,5 +1,7 @@
 \name{logLik.mlds}
 \alias{logLik.mlds}
+\alias{logLik.mlbs}
+
 
 \title{ Compute Log-Likelihood for an mlds object}
 \description{
@@ -7,10 +9,11 @@
 }
 \usage{
 \method{logLik}{mlds}(object, ...)
+\method{logLik}{mlbs}(object, ...)
 }
 
 \arguments{
-  \item{object}{an object of class \sQuote{mlds} typically from a call to \code{mlds}}
+  \item{object}{an object of class \sQuote{mlds} or  \sQuote{mlbs}typically from a call to \code{mlds}}
   \item{\dots}{for passing additional parameters, but is currently not used. }
 }
 

@@ -63,3 +63,19 @@ version 0.2-1
 
   Fixed some Rd files that were giving warnings
   
+version 0.2-2
+  
+  Method of triads integrated into package.  mlds.default has
+  been removed and now there is mlds.mlds.df for the method
+  of quadruples (input objects of class mlds.df or data.frame)
+  and mlds.mlbs.df for the method of triads (objects of class
+  mlbs.df or data.frame) and generating objects of class mlds
+  and mlbs, respectively.
+  
+  RunSampleExperiment changed to RunQuadExperiment and RunTriadExperiment
+  added.  The first produces an object of class mlds.df, as the
+  older function did and the latter an object of class mlbs.df
+
+  complementary methods added for objects of class mlbs.df and class mlbs
+
+  mlds.formula method works for mlbs.df objects, i.e., triads, too.

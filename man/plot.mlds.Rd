@@ -2,6 +2,10 @@
 \alias{plot.mlds}
 \alias{lines.mlds}
 \alias{points.mlds}
+\alias{plot.mlbs}
+\alias{lines.mlbs}
+\alias{points.mlbs}
+
 
 \title{ Plot a mlds Object }
 \description{
@@ -11,10 +15,14 @@
 \method{plot}{mlds}(x, standard.scale = FALSE, ...)
 \method{lines}{mlds}(x, standard.scale = FALSE, ...)
 \method{points}{mlds}(x, standard.scale = FALSE, ...)
+
+\method{plot}{mlbs}(x, standard.scale = FALSE, ...)
+\method{lines}{mlbs}(x, standard.scale = FALSE, ...)
+\method{points}{mlbs}(x, standard.scale = FALSE, ...)
 }
 
 \arguments{
-  \item{x}{\code{mlds} object, typically result of \code{mlds}}
+  \item{x}{\code{mlds} or \code{mlbs}  object, typically result of \code{mlds}}
   \item{standard.scale}{ logical indicating whether the plotted difference scale should be normalized to maximum value = 1}
   \item{\dots}{ other parameters to be passed through to the plotting function }
 }

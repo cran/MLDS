@@ -6,3 +6,6 @@
 		return(solve(object$hess))	
 		}
 	}
+	
+`vcov.mlbs`<- function(object, ...) 
+		return(vcov(object$obj))

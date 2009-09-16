@@ -16,3 +16,7 @@ function(object, ...) {
 	as.vector(ans)
 	}
 
+`fitted.mlbs` <- function(object, ...){
+	 ans <- fitted(object$obj)
+	 as.vector(ans)
+	}

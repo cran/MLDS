@@ -1,19 +1,25 @@
 \name{summary.mlds}
 \alias{summary.mlds}
 \alias{print.summary.mlds}
+\alias{summary.mlbs}
+\alias{print.summary.mlbs}
 
 \title{Summary for a mlds fit }
 \description{
-Takes a fitted \sQuote{mlds} object and produces a summary of it
+Takes a fitted \sQuote{mlbs} or\sQuote{mlds} object and produces a summary of it
 }
 \usage{
 \method{summary}{mlds}(object, digits = max(3, getOption("digits") - 4), ...)
 
 \method{print}{summary.mlds}(x, digits = max(3, getOption("digits") - 4), ...)
+
+\method{summary}{mlbs}(object, digits = max(3, getOption("digits") - 4), ...)
+
+\method{print}{summary.mlbs}(x, digits = max(3, getOption("digits") - 4), ...)
 }
 
 \arguments{
-  \item{object}{ an object of class \sQuote{mlds} typically produced by a call to \code{mlds}. }
+  \item{object}{ an object of class \sQuote{mlbs} or \sQuote{mlds}typically produced by a call to \code{mlds}. }
   \item{digits}{ The number of digits to display.}
   \item{x }{An object of class \sQuote{summary.mlds}.}
   \item{\dots}{Addtional arguments passed to the default print method. Only effects the output of \code{pscale}.}

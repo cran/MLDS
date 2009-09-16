@@ -1,7 +1,7 @@
 binom.diagnostics <- function(obj, nsim = 200, type = "deviance") 
 	{
 	n <- length(fitted(obj))
-	d <- as.mlds.df(obj$obj$data)
+	d <- as.mlds.df(obj$obj$data) 
 	res <- sapply(seq_len(nsim), function(x, obj){
 		ys <- rbinom(n, 1, fitted(obj))
 		d$resp <- ys
@@ -21,7 +21,7 @@ binom.diagnostics <- function(obj, nsim = 200, type = "deviance")
  		list(sapply(seq(1, length(res), 2), 
  		function(x) res[[x]]))))
  	fres$resid <- apply(fres$resid, 2, sort)
- 	fres$Obs.resid <- residuals(obj$ob, type = type)
+ 	fres$Obs.resid <- residuals(obj$obj, type = type)
 	rs <- residuals(obj$obj, type = type)
 	fv.sort <- sort(fitted(obj), index.return = TRUE)
 	rs <- rs[fv.sort$ix]

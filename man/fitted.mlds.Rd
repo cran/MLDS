@@ -1,5 +1,6 @@
 \name{fitted.mlds}
 \alias{fitted.mlds}
+\alias{fitted.mlbs}
 
 \title{ Fitted Responses for a Difference Scale }
 \description{
@@ -7,11 +8,13 @@
 }
 \usage{
 \method{fitted}{mlds}(object, ...)
+
+\method{fitted}{mlbs}(object, ...)
 }
 
 
 \arguments{
-  \item{object}{object of class 'mlds", typically obtained from the output of \code{mlds}. }
+  \item{object}{object of class \sQuote{mlds} or \sQuote{mlbs}, typically obtained from the output of \code{mlds}. }
   \item{\dots}{currently ignored}
 }
 

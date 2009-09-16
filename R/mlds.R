@@ -2,7 +2,7 @@
 	UseMethod("mlds")
 
 
-`mlds.default` <- 
+`mlds.mlds.df` <- 
 function(x, stimulus = NULL, method = "glm",
 			lnk = "probit", opt.meth = "BFGS", 
 			opt.init = NULL, control = glm.control(maxit = 50000,
@@ -15,7 +15,7 @@ function(x, stimulus = NULL, method = "glm",
 		if (inherits(data, "mlds.df")) {
 			stimulus <- attr(data, "stimulus")
 			} else
-		{stimulus = seq(max(data))}
+		{stimulus <- seq(max(data))}
 		} 
 		
 	if (method == "glm") {
@@ -57,7 +57,7 @@ function(x, stimulus = NULL, method = "glm",
 			sum(log(1 - (p[d[, 1] == 0])), na.rm = TRUE)
 }
 	
-diff.sc <- function(n, s, d) {
+diff.sc <- function(n, s, d, opt.m = opt.meth) {
  ### n <- initial est. for perceptual scale
  ### s <- initial est. of sd
  ### d <- data.frame
@@ -65,7 +65,7 @@ diff.sc <- function(n, s, d) {
  	x <- qlogis(n) #values 2 to len - 1
  	x[length(x) + 1] <- log(s)
 	 r.opt <- optim(x, diff.err, d = d, hessian = TRUE,
- 				method = "BFGS",
+ 				method = opt.m,
 				control = list(maxit = 50000, abstol = 1e-14), ...)
  	list(pscale = c(0, plogis(r.opt$par[-length(r.opt$par)]), 1),
  		stimulus = stimulus,
@@ -102,19 +102,23 @@ function(x, p, data, stimulus = NULL,
 		as.function(ff, parent.frame())
 	}
 	d <- data
+	if (length(d) == 4)
+	 	d[, 1] <- ifelse(d[, 2] > d[, 3], 1 - d[, 1], d[, 1])
+	wts <- if (length(d) == 4) c(1, -2, 1) else c(1, -1, -1, 1)
+	nc <- if (length(d) == 4) 3 else 4
 	sx <- if (missing(stimulus)) {
-		if (inherits(d, "mlds.df")) {
+		if (inherits(d, c("mlds.df", "mlbs.df"))) {
 			attr(d, "stimulus")
 			} else
 		{seq(max(d))}
-		} else stimulus	
-	
+		} else stimulus
+      	
 	diff.err <- function(parm, ff, sx) {
 	#compute likelihood w/ f(p)	, p includes s as last param
 		s <- parm[length(parm)]
 		px <- parm[-length(parm)]
 		del <- matrix(ff(px, sx[unlist(d[, -d$resp])]), 
-			ncol = 4) %*% c(1, -1, -1, 1)
+			ncol = nc) %*% wts
 		z <- del/s			
 		fam <- binomial(link = lnk)
 		p <- fam$linkinv(z)
@@ -124,7 +128,7 @@ function(x, p, data, stimulus = NULL,
 		-sum(log(p[d$resp == 1]), na.rm = TRUE) -
 			sum(log(1 - (p[d$resp == 0])), na.rm = TRUE)	}
 	f <- Form2fun(form, expression(p))
-	res <- optim(p, diff.err, hessian = TRUE, method = "BFGS",
+	res <- optim(p, diff.err, hessian = TRUE, method = opt.meth,
 	 		control = control, ff = f, sx = sx)
 	pscale <- f(res$par[-length(res$par)], sx)	
 	pscale <- (pscale - pscale[1])/(pscale[length(pscale)] - pscale[1])
@@ -135,6 +139,48 @@ function(x, p, data, stimulus = NULL,
 		method = "formula", link = lnk, data = d,
 		conv = res$convergence,	formula = form,
 		func = f)
-	class(psc) <- "mlds"
+	class(psc) <- if (length(data) == 5 ) "mlds" else "mlbs"
 	psc
+}
+
+`mlds.mlbs.df` <- function(x, stimulus = NULL, method = "glm",
+			lnk = "probit",
+			control = glm.control(maxit = 50000, 
+        	epsilon = 1e-14), ...) {
+    if (method != "glm") 
+    	stop("Only glm method currently defined for this class!\n")   
+    if (missing(stimulus)) {
+        if (inherits(x, "mlbs.df")) {
+            stimulus <- attr(x, "stimulus")
+        }
+        else {
+            stimulus <- seq(max(x))
+        }
+    }
+   d <- x
+   N <- max(d[, -1], na.rm = TRUE)
+	bix.mat <- matrix(0, nrow = nrow(d), ncol = N)
+	for (ix in seq_len(nrow(d))) {
+		iy <- unlist(d[ix, -1])
+		bix.mat[ix, iy] <- c(1, -2, 1)
+	}
+	d[, 1] <- ifelse(d[, 2] > d[, 3], 1 - d[, 1], d[, 1])
+	d.bis <- data.frame(resp = d[, 1], S = bix.mat)
+	d.bis$S.1 <- NULL
+	out.bis <- glm(factor(resp) ~ . - 1, 
+		family = binomial(link = lnk), data = d.bis,
+		control = control, ...)
+	out.lst <- list(pscale = c(0, coef(out.bis)), 
+		stimulus = stimulus, sigma = 1, method = "glm",
+		link = lnk, obj = out.bis)
+    class(out.lst) <- "mlbs"
+    out.lst
+}
+
+
+`mlds.data.frame` <- function(x, ...) {
+	x <- if (length(x) == 5) 
+		as.mlds.df(x) else
+		as.mlbs.df(x)	
+	mlds(x, ...)
 }
