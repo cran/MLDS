@@ -1,11 +1,11 @@
 `simu.6pt` <-
-function(obj, nsim = 1) {
+function(obj, nsim = 1, nrep) {
 	dd <- if (obj$method == "glm") 
 		as.mlds.df(obj$obj$data) else
 		obj$data
 	sigma <- obj$sigma
 # calculate likelihood by 6-point test
-	Six.Pts <- Get6pts(obj)
+	Six.Pts <- Get6pts(obj, nrep)
 	cc <- attr(Six.Pts, "indices")
 	ll6pt <- drop(lik6pt(obj, Six.Pts))
 # compute p-values for each trial

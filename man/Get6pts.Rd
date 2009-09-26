@@ -6,10 +6,11 @@
  \code{Get6pts} enumerates all 6-point conditions from a difference scaling experiment and is used as one of the input arguments for calculating an observer's likelihood for his performance on 6-point conditions.
 }
 \usage{
-Get6pts(x, ...)
+Get6pts(x, nrep, ...)
 }
 \arguments{
   \item{x}{ an object of class \sQuote{mlds}.}
+  \item{nrep}{ integer indicating how many sessions are in the data set.}
   \item{\dots}{Possibility of sending additional arguments but currently unused.}
 }
 \details{
@@ -28,7 +29,7 @@ The attribute gives the row numbers from which the trials were obtained from the
 \seealso{ \code{\link{SwapOrder}},  \code{\link{lik6pt}},  \code{\link{simu.6pt}} }
 \examples{
 data(kk1)
-kk.6pt <- Get6pts(mlds(SwapOrder(kk1)))
+kk.6pt <- Get6pts(mlds(SwapOrder(kk1)), nrep = 1)
 
 }
 \keyword{manip}

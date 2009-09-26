@@ -6,12 +6,13 @@
   Using the \code{fitted} responses (probabilities) to the difference scale, new responses are generated which permit new 6-point likelihoods to be calculated.  The distribution of a large number of such likelihoods can be compared with that obtained from the observed responses to evaluate the internal consistency of the estimated scale.
 }
 \usage{
-simu.6pt(obj, nsim = 1)
+simu.6pt(obj, nsim = 1, nrep)
 }
 
 \arguments{
   \item{obj}{object of class \sQuote{mlds}}
   \item{nsim}{ integer indicating number of bootstrap trials.}
+  \item{nrep}{ integer indicating how many sessions with are in the data set.}
 }
 
 \value{
@@ -34,7 +35,7 @@ Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference sca
 	x.mlds <- mlds(SwapOrder(kk1))
 	#nsim should be near 10,000 for stability,
 	# but this will take a little time
-	simu.6pt(x.mlds, 100)
+	simu.6pt(x.mlds, 100, nrep = 1)
 }
 \keyword{ datagen }
 \keyword{ misc }

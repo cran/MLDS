@@ -79,3 +79,13 @@ version 0.2-2
   complementary methods added for objects of class mlbs.df and class mlbs
 
   mlds.formula method works for mlbs.df objects, i.e., triads, too.
+
+version 0.2-3
+
+  Get6pts wasn't taking into account multiple trials with the same
+  quadruples.  Fixed now.
+
+  Get6pts and simu.6pt take a new argument, nrep, which indicates
+  how many sessions (complete sets of quadruples) the data represent.
+
+

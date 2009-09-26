@@ -31,7 +31,7 @@ Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference sca
 
 data(kk1)
 x.df <- mlds(SwapOrder(kk1))
-lik6pt(x.df, Get6pts(x.df))
+lik6pt(x.df, Get6pts(x.df, nrep = 1))
 
 }
 
