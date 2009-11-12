@@ -88,4 +88,10 @@ version 0.2-3
   Get6pts and simu.6pt take a new argument, nrep, which indicates
   how many sessions (complete sets of quadruples) the data represent.
 
+version 0.2-4
 
+  added CITATION file to inst directory
+
+version 0.2-5
+
+  fixed bug in runQuadExperiment example on man page

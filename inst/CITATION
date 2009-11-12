@@ -1,0 +1,15 @@
+citHeader("To cite package MLDS in publications use:")
+
+citEntry(entry="Article",
+         title = "MLDS : Maximum likelihood difference scaling in R",
+         author = personList(as.person("K. Knoblauch"), 
+                             as.person("L. T. Maloney")),
+	 journal = "Journal of Statistical Software",
+         volume      = "25",
+         year         = "2008",
+         pages         = "1--26",
+         url          = "http://www.jstatsoft.org/v25/i02/",
+         
+         textVersion = 
+         paste("Knoblauch, K. & Maloney, L. T. (2008) MLDS : Maximum likelihood difference scaling in R, Journal of Statistical Software, 25, 1-26, http://www.jstatsoft.org/v25/i02/.")
+)

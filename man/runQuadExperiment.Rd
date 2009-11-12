@@ -20,7 +20,7 @@ runTriadExperiment(DisplayTrial, DefineStimuli, NumTrials = NULL,
   \item{aspect}{numeric giving the height/width ratio of the display on the screen.}
 }
 \details{
- These functions are to demonstrate how to run a difference scaling experiment.  Helper functions \code{DisplayQuadTrial} or \code{DisplayTriadTrial} and \code{DefineMyScale} permit running the perception of correlation experiment, sample data from which are provided as datasets,
+ These functions are to demonstrate how to run a difference scaling experiment.  Helper functions \code{DisplayOneQuad} or \code{DisplayOneTriad} and \code{DefineMyScale} permit running the perception of correlation experiment, sample data from which are provided as datasets,
  (see \code{\link{kk}}). 
  }
 \value{
@@ -33,12 +33,12 @@ runTriadExperiment(DisplayTrial, DefineStimuli, NumTrials = NULL,
 ##This will start a 330 trial interactive experiment
 ##  of quadruples
 \dontrun{
-	runQuadExperiment("DisplayQuadTrial", "DefineMyScale")
+	runQuadExperiment("DisplayOneQuad", "DefineMyScale")
 	}
 ##This will run 10 trials of an interactive experiment
 ##  of triads
 \dontrun{
-	runTriadExperiment("DisplayTriadTrial", 
+	runTriadExperiment("DisplayOneTriad", 
 		"DefineMyScale", NumTrials = 10)
 	}
 }
