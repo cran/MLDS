@@ -1,7 +1,7 @@
 citHeader("To cite package MLDS in publications use:")
 
 citEntry(entry="Article",
-         title = "MLDS : Maximum likelihood difference scaling in R",
+         title = "{MLDS} : Maximum likelihood difference scaling in {R}",
          author = personList(as.person("K. Knoblauch"), 
                              as.person("L. T. Maloney")),
 	 journal = "Journal of Statistical Software",

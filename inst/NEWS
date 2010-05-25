@@ -95,3 +95,15 @@ version 0.2-4
 version 0.2-5
 
   fixed bug in runQuadExperiment example on man page
+
+version 0.2-6
+
+  typos in Rd files
+
+  re-ordered ... arguments to optim in mlds.formula method
+
+version 0.2-7
+
+  added function SimMLDS which creates data from a simulated 
+  MLDS experiment
+

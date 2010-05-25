@@ -113,7 +113,7 @@ function(x, p, data, stimulus = NULL,
 		{seq(max(d))}
 		} else stimulus
       	
-	diff.err <- function(parm, ff, sx) {
+	diff.err <- function(parm, ff, sx, d) {
 	#compute likelihood w/ f(p)	, p includes s as last param
 		s <- parm[length(parm)]
 		px <- parm[-length(parm)]
@@ -128,8 +128,9 @@ function(x, p, data, stimulus = NULL,
 		-sum(log(p[d$resp == 1]), na.rm = TRUE) -
 			sum(log(1 - (p[d$resp == 0])), na.rm = TRUE)	}
 	f <- Form2fun(form, expression(p))
-	res <- optim(p, diff.err, hessian = TRUE, method = opt.meth,
-	 		control = control, ff = f, sx = sx)
+	res <- optim(p, diff.err, ff = f, sx = sx, d = d,
+			hessian = TRUE, method = opt.meth,
+	 		control = control)
 	pscale <- f(res$par[-length(res$par)], sx)	
 	pscale <- (pscale - pscale[1])/(pscale[length(pscale)] - pscale[1])
 	psc <- list(pscale = pscale, stimulus = sx, 

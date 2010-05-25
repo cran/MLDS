@@ -5,7 +5,7 @@ export(mlds, mlds.mlds.df, mlds.mlbs.df, mlds.formula,
        DisplayOneQuad, DisplayOneTriad,
         boot.mlds, boot.mlbs, Rbind,
 	binom.diagnostics, df2mlds.df,
-	as.mlds.df, as.mlbs.df
+	as.mlds.df, as.mlbs.df, SimMLDS
 	)
 
 #S3method(AIC, mlds)
