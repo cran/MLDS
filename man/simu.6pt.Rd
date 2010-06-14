@@ -6,13 +6,14 @@
   Using the \code{fitted} responses (probabilities) to the difference scale, new responses are generated which permit new 6-point likelihoods to be calculated.  The distribution of a large number of such likelihoods can be compared with that obtained from the observed responses to evaluate the internal consistency of the estimated scale.
 }
 \usage{
-simu.6pt(obj, nsim = 1, nrep)
+simu.6pt(obj, nsim = 1, nrep, no.warn = TRUE)
 }
 
 \arguments{
   \item{obj}{object of class \sQuote{mlds}}
   \item{nsim}{ integer indicating number of bootstrap trials.}
   \item{nrep}{ integer indicating how many sessions with are in the data set.}
+  \item{no.warn}{logical indicating when TRUE (default) to suppress warnings from \code{glm}.}
 }
 
 \value{

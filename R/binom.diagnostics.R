@@ -1,5 +1,9 @@
-binom.diagnostics <- function(obj, nsim = 200, type = "deviance") 
+binom.diagnostics <- function(obj, nsim = 200, type = "deviance", no.warn = TRUE) 
 	{
+	if (no.warn){
+		old.opt <- options(warn = -1)
+		on.exit(options(old.opt))
+	}
 	n <- length(fitted(obj))
 	d <- as.mlds.df(obj$obj$data) 
 	res <- sapply(seq_len(nsim), function(x, obj){

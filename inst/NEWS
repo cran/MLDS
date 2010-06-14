@@ -107,3 +107,16 @@ version 0.2-7
   added function SimMLDS which creates data from a simulated 
   MLDS experiment
 
+version 0.2-8
+
+  suppressed warnings from boot.mlds, boot.mlbs binom.diagnostics, 
+  and simu.6pt and added option no.warn to each of these to turn
+  them back on
+
+  made the output of boot.mlds and boot.mlbs lists of class "mlds.bt" 
+  and added a summary method to extract the means and SDs.  These can
+  be specified to be either on the standard or unnormalized scales
+
+  added defunct function for runSampleExperiment, this being replace 
+  earlier by runQuadExperiment and runTriadExperiment
+

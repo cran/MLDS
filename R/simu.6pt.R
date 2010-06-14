@@ -1,5 +1,9 @@
 `simu.6pt` <-
-function(obj, nsim = 1, nrep) {
+function(obj, nsim = 1, nrep, no.warn = TRUE) {
+	if (no.warn){
+		old.opt <- options(warn = -1)
+		on.exit(old.opt)
+	}
 	dd <- if (obj$method == "glm") 
 		as.mlds.df(obj$obj$data) else
 		obj$data
