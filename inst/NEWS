@@ -120,3 +120,8 @@ version 0.2-8
   added defunct function for runSampleExperiment, this being replace 
   earlier by runQuadExperiment and runTriadExperiment
 
+version 0.2-9
+
+  added vignette
+
+  added Transparency data set
