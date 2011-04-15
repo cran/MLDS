@@ -22,7 +22,9 @@ If TRUE and \code{standard.scale = TRUE}, the bootstrapped \code{sigma} value is
   \item{...}{additional arguments to summary, currently unused.}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Returns means and standard deviations bootstrapped values for an object of class \sQuote{mlds.bt}.  
+By default the values are on the standard scale but may be renormalized by the standard deviation of
+each bootstrap run before taking the means and standard deviations.
 }
 \value{
 A two column matrix is returned of the bootstrap means and standard deviations in columns 1 and 2, respectively.

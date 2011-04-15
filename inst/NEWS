@@ -117,7 +117,7 @@ version 0.2-8
   and added a summary method to extract the means and SDs.  These can
   be specified to be either on the standard or unnormalized scales
 
-  added defunct function for runSampleExperiment, this being replace 
+  added defunct function for runSampleExperiment, this being replaced 
   earlier by runQuadExperiment and runTriadExperiment
 
 version 0.2-9

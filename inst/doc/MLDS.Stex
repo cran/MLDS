@@ -62,7 +62,7 @@ for arbitrary physical continua.
 }
 
 %% need no \usepackage{Sweave.sty}
-%\VignetteIndexEntry{MLDS}: Maximum Likelihood Difference Scaling in \proglang{R}}
+%\VignetteIndexEntry{MLDS}: Maximum Likelihood Difference Scaling in R}
 %\VignetteKeywords{difference scaling, sensory magnitude, proximity, psychophysics, signal detection theory, GLM, R}
 %\VignettePackage{MLDS}
 
