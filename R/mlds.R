@@ -4,7 +4,7 @@
 
 `mlds.mlds.df` <- 
 function(x, stimulus = NULL, method = "glm",
-			lnk = "probit", opt.meth = "BFGS", 
+			lnk = "probit", opt.meth = "BFGS", glm.meth = "glm.fit",
 			opt.init = NULL, control = glm.control(maxit = 50000,
 				epsilon = 1e-14), ...
 			) {
@@ -23,7 +23,8 @@ function(x, stimulus = NULL, method = "glm",
 		dsInc.df <- make.ix.mat(data)
 		psc.glm <- glm(resp ~ . - 1, 
 			family = binomial(link = lnk), 
-			data = dsInc.df, control = control, ...)
+			data = dsInc.df, control = control, 
+			method = glm.meth, ...)
 		psc.glm$call$family[[2]] <- lnk
 		psc.glm$call$control <- control #glm.control(maxit = 50000,
 #				epsilon = 1e-14)
@@ -147,7 +148,7 @@ function(x, p, data, stimulus = NULL,
 `mlds.mlbs.df` <- function(x, stimulus = NULL, method = "glm",
 			lnk = "probit",
 			control = glm.control(maxit = 50000, 
-        	epsilon = 1e-14), ...) {
+        	epsilon = 1e-14), glm.meth = "glm.fit", ...) {
     if (method != "glm") 
     	stop("Only glm method currently defined for this class!\n")   
     if (missing(stimulus)) {
@@ -170,7 +171,7 @@ function(x, p, data, stimulus = NULL,
 	d.bis$S.1 <- NULL
 	out.bis <- glm(factor(resp) ~ . - 1, 
 		family = binomial(link = lnk), data = d.bis,
-		control = control, ...)
+		control = control, method = glm.meth, ...)
 	out.lst <- list(pscale = c(0, coef(out.bis)), 
 		stimulus = stimulus, sigma = 1, method = "glm",
 		link = lnk, obj = out.bis)

@@ -12,13 +12,14 @@
 mlds(x, ...)
 
 \method{mlds}{mlds.df}(x, stimulus = NULL, method = "glm", 
-	lnk = "probit", opt.meth = "BFGS", opt.init = NULL, 
-	control = glm.control(maxit = 50000, epsilon = 1e-14), 
+	lnk = "probit", opt.meth = "BFGS", glm.meth = "glm.fit",
+	opt.init = NULL, control = glm.control(maxit = 50000, epsilon = 1e-14), 
 	... )
 	
 \method{mlds}{mlbs.df}(x, stimulus = NULL, method = "glm", 
 	lnk = "probit",
 	control = glm.control(maxit = 50000, epsilon = 1e-14), 
+	glm.meth = "glm.fit", 
 	... )
 
 \method{mlds}{data.frame}(x, ... )
@@ -38,6 +39,8 @@ mlds(x, ...)
   \item{opt.meth}{If \code{method} = \dQuote{optim}, the method used by \code{optim} can be specified.  Defaults to \dQuote{BFGS}.}
   \item{opt.init}{Vector of numeric giving initial values which must be provided if you specify the \dQuote{optim} method.}
   \item{control}{ A list of control values for either \code{glm} or \code{optim}.  Since the \code{method} defaults to \dQuote{glm}, the default is a glm list but should be changed if the \dQuote{optim} method is chosen.}
+ \item{glm.meth}{the method to be used in fitting the model, only when \code{method = glm}. The default value is \dQuote{glm.fit}.  See\code{\link{glm}} for further details.
+ }
 \item{...}{Additional arguments passed along to \code{glm} or \code{optim.}
 	}
 }

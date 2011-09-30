@@ -62,7 +62,7 @@ for arbitrary physical continua.
 }
 
 %% need no \usepackage{Sweave.sty}
-%\VignetteIndexEntry{MLDS}: Maximum Likelihood Difference Scaling in R}
+%\VignetteIndexEntry{{MLDS}: Maximum Likelihood Difference Scaling in R}
 %\VignetteKeywords{difference scaling, sensory magnitude, proximity, psychophysics, signal detection theory, GLM, R}
 %\VignettePackage{MLDS}
 
@@ -1124,7 +1124,20 @@ the \pkg{psyphy} package, which permit specifying these asymptotes differently f
 AIC is reduced by 48 if the lower estimate is set to about 0.06 and the upper
 to 0.007.  These values also lower the number of runs in the distributions of bootstrapped
 residuals, so that the observed value yields a \code{p} $ = 0.7$.
- 
+
+\subsubsection{Bias-reduced MLDS}
+When using the default argument \code{method = glm} with \code{mlds}
+a method argument can be passed to \code{glm} with the argument
+\code{glm.meth}.  Its default value is ``glm.fit'' but other methods 
+are possible.  For example, the \pkg{brglm} \citep{Kosmidis2007}
+ package contains the
+function \code{brglm.fit} that peforms a bias-reduced fit based on 
+\citet{Firth93}.  For example,
+\begin{Scode}{eval=FALSE}
+library(brglm)
+mlds(kk2, glm.meth = brglm.fit)
+\end{Scode}
+
 \subsection{The six-point test}
   
 Performing a six-point test  on these data with 10000 simulations

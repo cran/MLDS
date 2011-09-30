@@ -125,3 +125,9 @@ version 0.2-9
   added vignette
 
   added Transparency data set
+
+version 0.3-1
+
+  added glm.meth argument to mlds.mlds.df and mlds.mlbs.df so that other 
+  methods could be passed to glm function, such a brglm.fit from the 
+  brglm package.
