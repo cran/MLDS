@@ -131,3 +131,9 @@ version 0.3-1
   added glm.meth argument to mlds.mlds.df and mlds.mlbs.df so that other 
   methods could be passed to glm function, such a brglm.fit from the 
   brglm package.
+
+version 0.3-2
+
+   removed LazyLoad from Description
+
+   moved vignette from inst/doc to vignettes

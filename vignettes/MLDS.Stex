@@ -1,0 +1,1369 @@
+%\documentclass[article]{jss}
+\documentclass[nojss]{jss}
+
+
+
+
+\usepackage{amsmath}
+\newcommand{\class}[1]{``\code{#1}''}
+
+
+\author{Kenneth Knoblauch\\ Inserm, U846 \And 
+Laurence T.\ Maloney\\ New York University}
+\Plainauthor{Kenneth Knoblauch, Laurence T. Maloney} 
+
+\title{\pkg{MLDS}: Maximum Likelihood Difference Scaling in \proglang{R}}
+\Plaintitle{MLDS: Maximum Likelihood Difference Scaling in R} 
+
+\Abstract{
+This introduction to the \proglang{R} package \pkg{MLDS}  is a modified and
+updated version of \citet{KnoblauchMaloney2008} published
+in the \emph{Journal of Statistical Software}.
+
+The \pkg{MLDS} package  in the \proglang{R} programming language
+ can be used to estimate perceptual scales based on the results of
+psychophysical experiments using the method of difference scaling. In a difference scaling
+experiment, observers compare two supra-threshold differences (a,b) and (c,d) on each trial.
+The approach is based on a stochastic model of how the observer decides which perceptual
+difference (or interval) $(a,b)$ or $(c,d)$ is greater, and the parameters 
+of the model are estimated using a maximum likelihood criterion.
+We also propose a method  to test the model by evaluating 
+the self-consistency of the estimated scale.
+The package includes an example in which an observer judges the differences in correlation 
+between scatterplots. The example may be readily adapted to estimate perceptual scales
+for arbitrary physical continua.  
+}
+\Keywords{difference scaling, sensory magnitude, proximity, psychophysics, signal detection theory, GLM}
+
+
+
+\Address{
+  Kenneth Knoblauch\\
+  Inserm, U846, Bron, France\\
+ Stem Cell and Brain Research Institute\\
+  Department of Integrative Neurosciences \\
+  Universit\'e de Lyon, Lyon 1 \\
+  18 avenue du Doyen L\'epine\\
+  69500 Bron, France \\
+  Telephone: +33/472913477 \\
+  Fax: +33/472913461 \\
+  E-mail: \email{ken.knoblauch@inserm.fr}\\
+  URL: \url{http://www.sbri.fr/members/kenneth-knoblauch.html} \\
+   
+  Laurence T.\ Maloney \\
+  Department of Psychology\\
+  Center for Neural Science \\
+  New York University \\
+  6 Washington Place, 8th Floor \\
+  New York, NY 10011, United States of America \\
+  Telephone: +1/212/9987851 \\
+  E-mail: \email{ltm1@nyu.edu} \\
+  URL: \url{http://www.psych.nyu.edu/maloney/}
+}
+
+%% need no \usepackage{Sweave.sty}
+%\VignetteIndexEntry{{MLDS}: Maximum Likelihood Difference Scaling in R}
+%\VignetteKeywords{difference scaling, sensory magnitude, proximity, psychophysics, signal detection theory, GLM, R}
+%\VignettePackage{MLDS}
+
+\begin{document}
+
+\section{Introduction}
+\begin{Scode}{echo=FALSE,results=hide}
+library(MLDS)
+\end{Scode}
+
+Difference scaling is a psychophysical procedure used to estimate
+supra-threshold perceptual differences for stimuli distributed along a
+physical continuum.  On each of a set of trials, an observer is presented
+with a quadruple, $(I_{a},I_{b},I_{c},I_{d})$, drawn from an
+ordered set of stimuli, $\{I_{1} < I_{2} < \ldots < I_{p}\}$. For convenience, the two pairs 
+$(I_{a},I_{b})$ and $(I_{c},I_{d})$ are often ordered so that $I_{a}<I_{b}$ and $I_{c}<I_{d}$
+on the physical scale but they need not be. On each trial, the observer judges which pair shows
+the greater perceptual difference. The experimental data consist of an $%
+n \times 5$ matrix with each row comprising the indices of each quadruple, $(a,b;c,d)$, from the
+larger set and the observer's response for each of $n$ trials. 
+The output of the scaling procedure are scale values 
+$\{\psi_{1},\psi_{2},\ldots ,\psi_{p}\}$ that best capture the 
+subject's judgments of the perceptual difference between the stimuli in
+each pair $(I_{a},I_{b})$ as we describe in detail below. 
+
+In seminal papers, Schneider and colleagues %
+\citep{Schneid80a,Schneid80b,Schneidetal74} applied this procedure to the
+perception of loudness and proposed a method for estimating the difference
+scale based on the proportion of times the fitted model reproduced the observer's
+judgments. This method does not explicitly model stochastic variability in
+the observer's responses. \citet{Bosch01} proposed a method based on
+numerical rating of perceptual differences.
+Subsequently, \citet{MalYang03} developed a
+maximum likelihood procedure, maximum likelihood difference scaling (MLDS),
+for estimating the parameters of the scale. Their method is based on direct 
+perceptual comparison of pairs of stimuli. 
+
+MLDS has been successfully applied to characterize
+color differences \citep{MalYang03}, surface glossiness \citep{Obeinetal04},
+image quality \citep{Charrieretal}, adaptive processes in face distortion 
+\citep{Rhodesetal} and neural encoding of sensory attributes \citep{Yangetal2008}. 
+The mathematical basis for the method, including necessary and sufficient conditions for 
+a difference scale representation in the absence of observer error,
+can be found in \citet[Chapter 4, Definition 1, p.~147]{Krantzetal71}. 
+We summarize the most relevant of 
+these conditions below when we discuss diagnostic tests of the model. 
+
+In this article, we will describe the MLDS procedure using direct
+maximization of the likelihood as initially described by \citet{MalYang03}
+and an equivalent approach as a generalized linear model 
+\citep[GLM][]{McCNeld89}. We present an \proglang{R} package \citep{R}, 
+\pkg{MLDS}, that implements both approaches as well as diagnostics of the
+estimated scale's validity. 
+We first describe difference scaling experiments based on comparison 
+of pairs of pairs of stimuli termed \emph{quadruples}.  
+We later describe an alternative method based on triples of stimuli, 
+termed \emph{triads} 
+that may prove to be convenient in particular experimental applications
+    In the last section, we will demonstrate the
+package with an extended example in which we show how to use MLDS to
+evaluate perception of correlation in scatterplots \citep{Cleve84b}.
+The package is available from the Comprehensive \proglang{R} Archive
+    Network at \url{http://CRAN.R-project.org/package=MLDS}.
+
+In Figure 1 we show the
+kinds of stimuli used in the example: the $p=11$ scatterplots each based on
+samples of 100 points drawn from bivariate Gaussian distributions that differ only in
+correlation $r$.  The first ten values of $r$ are equally spaced from 0.0
+to 0.9 while the eleventh is 0.98. As explained in the next section, one
+goal of difference scaling is to develop a perceptual scale that predicts
+perceived differences between stimuli (here scatterplots) on the
+physical scale.  An example of such a scale is shown as the twelfth graph
+in the figure. The example code is organized so that
+it can be readily adapted to other applications.
+
+\begin{figure}[htbp!]
+\begin{center}
+\setkeys{Gin}{width=0.95\textwidth}
+\includegraphics{Figures/KM_JSS-002}
+\setkeys{Gin}{width=0.8\textwidth}
+\caption{The first 11 graphs are scatterplots of 100 points each drawn from
+a bivariate Gaussian distribution with the correlation given above each graph.
+The twelfth graph is a perceptual scale for differences of correlation estimated from
+the judgments of a single observer. Notice that, for values of correlation less than about 0.4, 
+the scatterplots are difficult to discriminate. The corresponding difference scale is 
+nearly constant across this range. }
+\label{Rscale}
+\end{center}
+\end{figure}
+
+
+\section{Maximum likelihood difference scaling}
+
+In this section, we develop the model of the observer's judgments in the
+psychophysical task of difference scaling. In each experimental session, the
+experimenter selects a set of $p$ stimuli, $\{I_{1},I_{2},\ldots ,I_{p}\}$
+ordered along a physical continuum, such as the $p=11$ correlations in Figure~\ref{Rscale}. 
+On each trial
+the experimenter presents an observer with quadruples $\left(
+I_{a},I_{b};I_{c},I_{d}\right) $, and asks him to judge which pair, $%
+I_{a},I_{b}$ or $I_{c},I_{d}$, exhibits the \textit{larger perceptual difference}.
+Figure~\ref{DSexamp} contains an example of such a quadruple. The observer's task is to
+judge whether the upper or lower pair of scatterplots exhibits the larger
+difference. It will prove convenient to replace 
+$\left(I_{a},I_{b};I_{c},I_{d}\right) $ by the simpler notation 
+$\left(a,b;c,d\right) $.  
+
+\begin{figure}[htb!]
+\begin{center}
+\includegraphics{Figures/KM_JSS-003}
+\caption{An example of a trial stimulus presentation from the difference
+scaling experiment for estimating correlation differences in the scatterplot
+experiment.  The observer must judge whether the difference in perceived correlation
+is greater in the lower or upper pair of scatterplots.}
+\label{DSexamp}
+\end{center}
+\end{figure}
+
+\subsection{Choosing the quadruples}
+Over the course of the experiment, the observer sees many
+different quadruples. The experimenter could choose to present all possible quadruples 
+$\left(a,b;c,d\right) $ for $p$ stimuli to the observer or a random sample of all 
+possible quadruples.
+In past work, experiments have used the set of all possible non-overlapping quadruples 
+$a<b<c<d$ for $p$ stimuli and the resulting scales have proven to be readily interpretable.
+Moreover, \citet{MalYang03} report extensive evaluations of this subset of all possible
+quadruples. Consequently we will be primarily concerned with this set of quadruples. 
+
+In the example we present, we use only the non-overlapping quadruples.
+The physical scale values are correlations of bivariate 
+Gaussian distributions, and the stimuli are
+scatterplots drawn from bivariate Gaussian distributions. 
+The changes needed to employ the methods and diagnostic tests presented here
+with other subsets of possible quadruples are very slight, should the user prefer a different set
+of quadruples.
+
+By restricting ourselves to non-overlapping quadruples, we avoid a possible artifact in the
+experimental design. Suppose we included
+quadruples such as $\left(a,b;a,c\right)$ with $a<b<c$ where the same physical scale value appears twice
+or quadruples of the form $\left(b,c;a,d\right)$ with $a<b<c<d$, where one interval is contained in the interior of the
+other. Now consider an observer who is actually not capable of comparing intervals
+and whose behavior cannot therefore be captured by a difference scale. If this observer can correctly order the
+stimuli, then, on a trial of the form $\left(a,b;a,c\right)$, he can
+still get the right answer by noting that both intervals have $a$ at one end so that $b<c$ implies
+that $\left(a,b\right)$ must be less than $\left(a,c\right)$. 
+A similar heuristic applied to $\left(b,c;a,d\right)$ with $a<b<c<d$
+would allow the observer to appear to be ordering intervals correctly when, 
+in fact, he cannot compare intervals. In either case,we might conclude that the observer
+is to some extent ordering intervals correctly when in fact he is simply employing a
+heuristic based on stimulus order.
+Using only non-overlapping intervals effectively forces the observer to compare intervals.
+Moreover, as noted above, the use of such intervals has proven 
+itself in previous computational and experimental situations. 
+However, as we shall see, one possible diagnostic test, the three-point test, requires comparison 
+of intervals of the form  $\left(a,b;a,c\right)$, and the experimenter interested in applying this test 
+would have to include certain overlapping 
+intervals, as we describe below in the discussion of this test.
+
+If $p=11$, as in the example, there
+are 
+\begin{equation}
+\left( 
+\begin{array}{c}
+11 \\ 
+4%
+\end{array}%
+\right) =\frac{11!}{4!\:7!}=330
+\end{equation}%
+different, non-overlapping quadruples. To control
+for positional effects, on half of the forced-choice trials, chosen at
+random, the pairs are presented in the order $\left( a,b;c,d\right) $ and on
+the other half, $\left( c,d;a,b\right) $. The order in which quadruples are represented is
+randomized. For $p=11$, the observer may judge each of the 330 non-overlapping
+quadruples in randomized order or the experimenter may choose to have the observer
+judge each of the quadruples $m$ times, completing 330$m$ trials in total.  Of course, the
+number of trials judged by the observer affects the accuracy of the estimated
+difference scale \citep[See][]{MalYang03}. The time
+needed to judge all 330 trials in the example is roughly 10--12 minutes.
+
+At the end of the experiment, the data are represented as an $n \times 5$
+matrix  or data frame in which each row corresponds to a trial: four
+columns  give the indices, $(a, b, c, d)$ of the stimuli from the ordered
+set of $p$, and  one column indicates the response of the observer to the
+quadruple as a 0 or 1,  indicating choice of the first or second pair. For
+example,  
+\begin{Scode}{}
+head(kk3)
+\end{Scode}
+gives the first 6 rows of the data frame for the observations that generated the
+scale shown in the lower right of Figure~\ref{Rscale}.
+
+From these data, the experimenter estimates the perceptual scale values 
+$\psi _{1},\psi _{2},\ldots ,\psi _{p}$ corresponding to the stimuli, $%
+I_{1},\ldots ,I_{p}$, as follows. Given a quadruple, $\left( a,b\, ; c,d\right)$
+from a single trial, we first assume that the observer judged $I_{a},I_{b}$
+to be further apart than $I_{c},I_{d}$ precisely when, 
+\begin{equation}
+|\psi _{b}-\psi _{a}|>|\psi _{d}-\psi _{c}|  \label{equ1}
+\end{equation}%
+that is, the difference scale predicts judgment of perceptual difference.
+
+It is unlikely that human observers would be so reliable in judgment as to
+satisfy the criterion just given, particularly if the perceptual differences $| \psi_b
+- \psi_a |$ and $| \psi_d - \psi_c |$ are close. \citet{MalYang03} proposed
+a stochastic model of difference judgment that allows the observer to
+exhibit some stochastic variation in judgment. Let $L_{ab} = | \psi_b -
+\psi_a |$ denote the unsigned perceived length of the interval $I_a, I_b$ . The
+proposed decision model is an equal-variance Gaussian signal detection model %
+\citep{GrSw74} where the signal is the difference in the lengths of the
+intervals, 
+\begin{equation}
+\delta(a, b; c, d) = L_{cd} - L_{ab} = | \psi_d - \psi_c | - | \psi_b -
+\psi_a |  \label{equ2}
+\end{equation}
+If $\delta$ is positive, the observer should choose the second interval as
+larger; when it is negative, the first. When $\delta$ is small, negative or
+positive, relative to the Gaussian standard deviation,  $\sigma$, we expect
+the observer, presented with the same stimuli, to give different, apparently
+inconsistent judgments. The decision variable employed by the observer is
+assumed to be 
+\begin{equation}
+\Delta(a, b; c, d) = \delta(a, b; c, d) + \epsilon = L_{cd} - L_{ab} +
+\epsilon  \label{equ3}
+\end{equation}
+where $\epsilon \sim \mathcal{N}(0, \sigma^2)$: given the quadruple, $\left ( a, b\, ;
+c, d \right )$ the observer selects the pair $I_c, I_d$ precisely when, 
+\begin{equation}
+\Delta(a, b\, ; c, d) > 0.  \label{equ4}
+\end{equation}
+
+\subsection{Direct maximization of likelihood}
+
+In each experimental condition the observer completes $n$ trials, each based
+on a quadruple $\mathbf{q}^k = \left( a^k, b^k ; c^k, d^k \right)$, $k = 1, n
+$. The observer's response is coded as $R^k = 0$ (the difference of the
+first pair is judged larger) or $R^k = 1$ (second pair judged larger). We denote the
+outcome ``$cd$ judged larger than $ab$'' by $cd \succ ab$ for convenience. 
+We fit the parameters $\mathbf{\Psi} = \left( \psi_1, \psi_2, \ldots, \psi_p
+\right )$ and $\sigma$ by maximizing the likelihood, 
+\begin{equation}
+L(\mathbf{\Psi}, \sigma) = \prod^n_{k= 1}\Phi \left (\frac{\delta\left (%
+\mathbf{q}^k \right)}{\sigma} \right )^{1 - R_k} \left (1 - \Phi \left (\frac{%
+\delta\left (\mathbf{q}^k \right)}{\sigma} \right ) \right )^{R_k},
+\label{like}
+\end{equation}
+where $\Phi(x)$ denotes the cumulative standard normal distribution
+ and $\delta \left (\mathbf{q}^k \right ) = \delta
+\left (a^k, b^k ; c^k, d^k \right )$  as defined in Equation~\ref{equ3}.
+
+At first glance, it would appear that the stochastic difference scaling
+model just presented has $p + 1$,  free parameters: $\psi_1, \ldots, \psi_p$
+together with the standard deviation of the error term,  $\sigma$. However,
+any linear transformation of the $\psi_1, \ldots, \psi_p$ together with a
+corresponding scaling by $\sigma^{-1}$ results in a set of parameters that predicts
+exactly the same performance as the original parameters. Without any loss of
+generality, we can set $\psi_1 = 0$ and  $\psi_p = 1$, leaving us with the $%
+p - 1$ free parameters, $\psi_2, \ldots, \psi_{p-1}$ and  $\sigma$. When
+scale values are normalized in this way, we describe them as standard scales.
+
+Equation~\ref{like} can be recognized as the likelihood for a Bernoulli
+variable. Taking the negative logarithm allows the parameters to be
+estimated simply with a minimization function such as \code{optim} in 
+\proglang{R} \citep[for example][p.~445]{VR02}.
+
+\subsubsection{Reparameterization}
+In practice, we define the minimization functions to work with the
+parameters on transformed scales:  the $p-2$ scale values by a logit
+transformation 
+\begin{equation}
+\log \left( \frac{x}{1-x}\right) 
+\label{logistic}
+\end{equation}%
+so they are constrained to be in the interval $(0,1)$ and $\sigma $ by the
+logarithm so that it remains positive. These transformations have no
+theoretical significance; they are used to avoid problems in numerical
+optimization. Maximum likelihood methods are invariant under such reparameterization 
+\citep[pp.~284--285]{MoodGray74}.
+
+\subsection{GLM method}
+
+In this section, we show how the above formulation can be framed as a GLM. A
+generalized linear model \citep[GLM][]{McCNeld89} is described by 
+\begin{equation}
+\eta( \E [ Y] ) = X \beta ,
+\end{equation}
+where $\eta$ is a (link) function transforming the expected value of the
+elements of the  response vector, $Y$, to the scale of a linear predictor
+given by the product of the model matrix, $X$, and a vector of coefficients, 
+$\beta$, and the elements of $Y$ are distributed as a member of the
+exponential family. In the present case, the responses of the observer can
+be considered as Bernoulli variables and, thus, can be modeled with the
+binomial distribution which conforms to this family. The canonical link
+function for the binomial case is the logistic transformation, Equation~\ref{logistic}. However,
+other links are possible, and the inverse cumulative Gaussian, or quantile
+function, corresponds to Equation~\ref{like}, described above 
+ and would be equivalent to a probit analysis.
+
+In this section, we assume that we have re-ordered each quadruple 
+$\left( a,b; c,d \right)$ so that $a<b<c<d$.
+With this ordering,  we can omit the absolute
+value signs in Equation~\ref{equ2} which then becomes 
+\begin{eqnarray}
+\delta & = & \psi_d - \psi_c - \psi_b + \psi_a  \nonumber \\
+\Delta & = & \delta + \epsilon.  \label{equ5}
+\end{eqnarray}
+The observer bases his or her judgment on $\Delta = \delta + \epsilon$ where 
+$\epsilon \sim \mathcal{N}(0, \sigma^2) $. The observer therefore selects the
+second pair $\left (c, d \right )$ with probability $\Phi \left (\delta
+\right )$, where $\Phi$ is the Gaussian distribution function.
+
+The design matrix, $X$, can be constructed by considering the weights of the 
+$\psi_i$ as the covariates. On a given trial, the values in only four
+columns are non-zero, taking on the values $1, -1, -1, 1$ in that order.
+This yields an $n \times p$ matrix, $X$, where $n$ is the number of
+quadruples tested and $p$ is the number of physical levels evaluated over
+the experiment. For example, consider a set of 7~stimuli  distributed along
+a physical scale and numbered 1--7. The five quadruples  
+\[
+\begin{array}{cccc}
+2 & 4 & 5 & 6 \\ 
+1 & 2 & 3 & 7 \\ 
+1 & 5 & 6 & 7 \\ 
+1 & 2 & 4 & 6 \\ 
+3 & 5 & 6 & 7%
+\end{array}
+\]
+yield the design matrix  
+\[
+X =  \left( 
+\begin{array}{rrrrrrr}
+0 & 1 & 0 & -1 & -1 & 1 & 0 \\ 
+1 & -1 & -1 & 0 & 0 & 0 & 1 \\ 
+1 & 0 & 0 & 0 & -1 & -1 & 1 \\ 
+1 & -1 & 0 & -1 & 0 & 1 & 0 \\ 
+0 & 0 & 1 & 0 & -1 & -1 & 1%
+\end{array}
+\right). 
+\]
+
+To render the model identifiable, however, we drop the first column, which
+has the effect of fixing $\beta _{1}=0$, yielding a model with $p-1$
+parameters to estimate as with the direct method. This yields the model, 
+\begin{equation}
+\Phi ^{-1} (\E[Y])=\beta _{2}X_{2}+\beta _{3}X_{3}+\ldots +\beta _{p}X_{p},
+\end{equation}%
+where $X_{j}$ is the $j^{th}$ column of $X$. Unlike the direct method, $\psi
+_{p}=\beta _{p}$ is unconstrained. Implicitly in the GLM model, $\sigma =1$.
+In fact, $\hat{\beta}_{p}$ from the GLM fit equals $\hat{\sigma}^{-1}$ from the direct
+method, so that, all things being equal,  normalizing the GLM coefficients by $\hat{\beta}_{p}$ 
+should yield
+the same scale as obtained by the direct method. 
+
+We have compared solutions using direct optimization (\code{optim} in %
+\proglang{R}) and  GLM\ fits (\code{glm} function) and find good agreement.
+Differences arise occasionally due to the additional constraints that we have imposed
+when fitting by the direct method.
+
+\subsection{Robustness}
+
+In \proglang{R}, there is a choice between five built-in link functions for
+the binomial family, including the logit, probit and cauchit (based on the
+Cauchy distribution). As of \proglang{R} version 2.4.0, it has become simple
+for the user to define additional links. In many circumstances, the choice
+of link is not critical, since over the rising part of these functions, they
+are quite similar. The difference scaling procedure, however, generates many
+responses at the tails, i.e., easily discriminable differences and one might think that
+it would be
+more sensitive to the choice of link.
+
+\citet{MalYang03} evaluated distributional robustness of the direct
+optimization method. They varied the distributions of the error term $\epsilon$
+while continuing to fit the data with the constant variance Gaussian error
+assumption. They found that MLDS was remarkably resistant to failures of
+the distributional assumptions. Hence, the GLM  approach using the
+\code{probit} link is likely to be adequate for most applications of MLDS.
+
+\subsection{Goodness of fit}
+
+Use of the GLM approach benefits from the availability of several
+diagnostic tests available in \proglang{R} for generalized linear models, and we report
+a measure ``proportion of deviance accounted for''  (DAF) that has been suggested \citep[p.~84]{Wood06} as well as the
+Akaike information criterion  \citep[AIC][]{Akaike}. 
+Some standard diagnostic measures are problematic  or difficult to interpret 
+for binary data, however, because
+the distribution of the deviance cannot be guaranteed to approximate a $\chi^2$ distribution 
+\citep{VR02,Wood06}.  Here, we implement  two diagnostic tests suggested by
+\citet{Wood06} based on a bootstrap analysis of the distribution and independence of
+the residuals in the example below.  The principle on which these tests are based
+would be applicable to any GLM model.
+
+\subsection{Diagnostic tests of the measurement model}
+
+Even if the data passed an overall goodness of fit test, there still 
+may be patterned failures in the data that would allow  rejection of the difference
+scaling model. 
+In this section, we describe two additional diagnostic tests based on
+the necessary and sufficient conditions that an observer
+must satisfy if we are to conclude that his judgments can be described by a
+difference scaling model 
+\citep[Chapter 4, p.~147, Definition 1]{Krantzetal71} discussed above.
+These tests are specific to difference scaling and they correspond to necessary conditions  
+for the existence of a difference scale in the non-stochastic case in Definition 1 of Krantz et al.
+
+
+\subsubsection{The six-point test}
+
+The first condition is the six-point condition, illustrated in Figure~\ref{SixPt}.
+It is referred to as the ``weak monotonicity'' condition 
+in \citet[Chapter 4, p.~147 and Figure~1]{Krantzetal71} in Definition 1, Axiom 4, p.~147. 
+It is also known as the ``sextuple condition'' \citep{BlockMarschak1960}.
+We describe the condition with an example.
+Suppose that there are two groups of three stimuli whose indices are $a < b < c$ , and 
+$a^{\prime}< b^{\prime}< c^{\prime}$, respectively. Suppose that a
+non-stochastic observer considers the quadruple$(a, b ; a^{\prime}, b^{\prime})$ 
+and judges that $ab \succ a^{\prime}b^{\prime}$, that the interval $ab$ is larger
+than the interval $a', b'$. On some other trial, he considers $(b, c ;
+b^{\prime}c^{\prime})$  and judges that $bc \succ b^{\prime}c^{\prime}$.
+Now, given the quadruple, $(a, c ; a^{\prime}, c^{\prime}) $ there is only
+one possible response consistent with the difference scaling model: he or
+she must choose $ac \succ a^{\prime}c^{\prime}$. The reasoning behind this
+constraint is illustrated in the figure and it can be demonstrated directly
+from the model. 
+
+For the non-stochastic observer, even one violation of
+this six-point condition would allow us to conclude that there was no
+consistent assignment of scale values $\psi_1, \psi_2, \ldots, \psi_p$  in a
+difference scaling model that could predict his or her judgments in a
+difference scaling task.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{Figures/KM_JSS-005}
+\caption{Six-Point Condition:  Given stimuli $a < b < c$ and $a' < b < c'$ ordered along a scale,
+if $ab \succ a'b'$ and $bc \succ b'c'$, then $ac \succ a'c'$. }
+\label{SixPt}
+\end{figure}
+
+The six-point condition is a slightly disguised test of additivity of contiguous intervals in the difference
+scale. To see how it might fail, imagine that distances in the scale correspond to
+chordal distances along a circular segment as shown in the left side of Figure~\ref{SixPtCurv}. Then the six-point condition in 
+equality form implies that if $ab = a'b'$ and $bc = b'c'$, then $ac = a'c'$ where $=$ 
+denotes subjective equality. If the six-point condition and other necessary conditions hold, then the chordal 
+distances on the left side of Figure~\ref{SixPtCurv} can be represented along a line as in the previous Figure~\ref{SixPt} 
+\citep[see][Chapter 4, for further discussion]{Krantzetal71}.
+On the right side of Figure~\ref{SixPtCurv}, in contrast, judgments are based on chordal distances along an
+ellipse. The six-point condition fails and these judgments cannot be represented by a difference scale.
+\begin{figure}[htbp]
+\setkeys{Gin}{width=0.4\textwidth}
+\centering
+\begin{tabular}{ll}   
+\includegraphics{Figures/KM_JSS-006}
+&   
+\includegraphics{Figures/KM_JSS-007}
+\end{tabular}
+\caption{Six-Point Condition:  Left. Given stimuli $a < b < c$ and $a' < b < c'$ ordered along a circular (constant curvature) segment,
+if the chordal distances $ab \approx a'b'$ and $bc \approx b'c'$, then $ac \approx a'c'$. Right. The six-point condition fails on a contour
+with non-constant curvature.}
+\label{SixPtCurv}
+\setkeys{Gin}{width=0.8\textwidth}
+\end{figure}
+
+Human judgments in difference scaling tasks are not deterministic: if we present the same
+quadruple at two different times, the observer's judgments need not be the same. The MLDS model
+allows for this possibility.
+In MLDS  decisions are based on a decision variable $\Delta(a, b ; c, d)$
+and, for any given six points $a, b, c$ and $a^{\prime}, b^{\prime},
+c^{\prime}$ there is a non-zero probability that the stochastic observer
+will violate the six-point condition. In particular, suppose that 
+$\psi_b - \psi_a$  is only slightly greater than $\psi_{b^{\prime}} - \psi_{a^{\prime}}$,
+$\psi_c - \psi_b$ is only slightly greater than 
+$\psi_{c^{\prime}} - \psi_{b^{\prime}}$, and $\psi_c - \psi_a$ is only slightly greater than
+ $\psi_{c^{\prime}} - \psi_{a^{\prime}}$. Then we might expect that the
+observer's probability of judging $ab \succ a^{\prime}b^{\prime}$ is only
+slightly greater that 0.5 and similarly with the other two quadruples.
+Hence, he has an appreciable chance of judging that 
+$ab \succ a^{\prime}b^{\prime}$  and $bc \succ b^{\prime}c^{\prime}$ but 
+$ac \prec a^{\prime}c^{\prime}$ or $ab \prec a^{\prime}b^{\prime}$ and 
+$bc \prec b^{\prime}c^{\prime}$ but $ac \succ a^{\prime}c^{\prime}$, either a
+violation of the six-point property.
+
+\citet{MalYang03} proposed a method for testing the six-point property that
+takes into account the stochastic nature of the observer's judgment and uses
+a resampling procedure \citep{EfrTib93} to test the hypothesis that the MLDS
+model is an appropriate model of the observer's judgments.
+
+Given the experimental design and all of the quadruples used, we can
+enumerate all six-point conditions present in the experiment, indexing them
+by $k = 1, n_6$. We count the number of times, $V_k$, that the observer has
+violated the $k^{th}$ six-point condition during the course of the
+experiment and the number of times he has satisfied it, $S_k$. If we knew the
+probability that the observer should violate this six-point condition $p_k$,
+then we could compute the probability of the observed outcome by the
+binomial formula, 
+\begin{equation}
+\Lambda^k_6 = \left ( 
+\begin{array}{c}
+V_k + S_k \\ 
+V_k%
+\end{array}
+\right ) p_k^{V_k} (1 - p_k)^{S_k},
+\end{equation}
+and we could compute the overall likelihood probability 
+\begin{equation}
+\Lambda_6 = \prod_{k = 1}^{N_6} \Lambda_6^k.  \label{sixpt}
+\end{equation}
+Under the hypothesis that the difference scale model is an accurate
+model of the observer's judgments, we have the fitted estimates of scale
+values $\hat{\psi_1}, \ldots, \hat{\psi_p}$ and $\hat{\sigma}$. We can
+compute estimates of the values
+ $\hat{\Lambda}_6^k$ based on these scale values and
+compute an estimate of 
+$\hat{\Lambda}_6 = \prod_{k = 1}^{N_6} \hat{\Lambda}_6^k$.  
+This is an estimate of the probability of the observed
+pattern of six-point violations and successes. We next simulate the observer
+$N$ times with the fitted parameter values 
+$\hat{\psi_1}, \ldots, \hat{\psi_p}$ 
+and $\hat{\sigma}$ of the actual observer used for the simulated
+observer and perform the analysis above to get $N$ bootstrap estimates $%
+\hat{\Lambda}_6^*$ of $\hat{\Lambda}_6$. Under the hypothesis that MLDS is
+an accurate model of the observer's judgments, $\hat{\Lambda}_6$ should be
+similar in value to $\hat{\Lambda}_6^*$ and we employ a resampling
+procedure to test the hypothesis at the 0.05 level by determining whether  $%
+\hat{\Lambda}_6$ falls below the 5th percentile of the bootstrap values $%
+\hat{\Lambda}_6^*$ ( See \citet{MalYang03} for details).
+
+
+\subsubsection{The three-point test}
+
+The second empirically-testable necessary condition for a difference scale representation of
+data is the three-point condition \citep[Chapter 4, p.~147, Definition 1, Axiom 3]{Krantzetal71}. 
+Given three stimuli $a < b < c$ , the
+non-stochastic observer must judge that $av \succ ab$ and $ac \succ bc$:
+an interval must be greater than a proper interval contained within it. Often, in
+difference scaling applications, this three-point property is evidently
+satisfied and not formally tested. 
+In some applications, the observer can simply be shown the test stimuli
+and asked to order them. If he or she can do so in agreement with the physical scale, further
+test of the three-point condition can be omitted.
+
+In the stochastic case, subjects may confuse some of the stimuli on some trials. In the example
+of Figure~\ref{Rscale} many observers will confuse the stimuli with lowest correlation values.
+The three-point property can be stated in a form appropriate for the stochastic case as: if $a < b < c$ then the
+probability of judging $ab$ as greater than $ac$ is less than or equal
+to 0.5 and similarly for $bc$ and $ac$.
+
+To test the 3-point condition, we must include quadruples of the form 
+$\left(a,b;a,c\right)$ with $a<b<c$. As noted above, the inclusion of such quadruples
+could introduce an artifact in the experimental design: the subject can correctly
+order the intervals based on consideration of only the order of the stimuli.
+If the experimenter excludes such quadruples then he cannot test the three-point 
+condition, and in any application the experimenter must decide if a test of the three-point condition is 
+warranted.
+
+We do not provide a three-point test in the \pkg{MLDS} package. 
+If the experimenter does choose to include quadruples of the form 
+$\left(a,b;a,c\right)$ with $a<b<c$ (``3-point quadruples''), 
+then it is very easy to design a three-point test 
+patterned on the six-point test above. 
+We use the fitted scale values and estimated $\sigma$ 
+to bootstrap an ideal observer matched to the actual. It is appropriate to exclude the 
+3-point quadruples in this initial fit of the scale. We then repeatedly compute the log likelihood 
+$\hat{\Lambda}_3^*$ of the ideal observer's performance for the ``three-point intervals''
+ and then compare
+the actual log likelihood $\hat{\Lambda}_3$ to the distribution of bootstrap replications $\hat{\Lambda}_3^*$.
+We reject if it falls below the $\alpha$th percentile of the bootstrap values for appropriate choice of $\alpha$.
+If the observer's performance is consistent with the three-point condition, then the scale can be re-fitted
+using all data including the three-point quadruples.
+
+\subsubsection{Other necessary conditions and alternative axiomatizations} 
+
+\citet[Chapter~4, p.~147, Definition 1]{Krantzetal71} list six conditions (``axioms'') that are jointly necessary and 
+sufficient for a data set to be representable by a difference scale in the non-stochastic case.
+The three-point and six-point diagnostic tests were based on two of these
+conditions (Definition 1, Axioms 3,4, respectively). Of the remaining necessary conditions, two effectively
+guarantee that the experimental design contains ``enough'' distinct quadruples, and that the observer can 
+order intervals transitively (Axioms 1,2). Axiom 5 is satisfied if the values of the physical scale 
+can be put into correspondence with an interval of the real numbers (evidently true in our example
+for correlation $-1 \leq r \leq 1$). Axiom 6 precludes the possibility that an interval 
+$ab$ with $a<b$ contains an 
+infinite number of non-overlapping intervals that are all equal. 
+In the stochastic case, these conditions are either evidently satisfied or are replaced by consideration
+of the accuracy and stability of the estimated scale.  \citet{MalYang03} have
+investigated accuracy, stability and robustness in some detail.
+
+There are alternative sets of axiomatizations of difference scaling such as \citet{Suppes72}
+and, of course, all sets of necessary and sufficient conditions are mathematically  equivalent.
+We have chosen those of \citet{Krantzetal71} because they lead to simple 
+psychophysical tasks. Observers are asked only to order intervals. Either they can do 
+so without violating the six-point and three point conditions or they cannot and whether they can or cannot
+is an experimental question. \citet[Chapter~4]{Krantzetal71} contains useful discussion of
+the link between the axiomatization that they propose and the task imposed on observers.
+
+The reader may wonder why the observer is asked to compare intervals and not just pairs of stimuli.
+\citet[Chapter~4, pps.~137--142]{Krantzetal71} contains an extended discussion of the
+advantages of asking observers to directly compare intervals. We note only that pairwise comparison 
+of the stimuli (i.e. given $a, b$, judge whether $a < b$) does not provide enough information 
+to determine spacing along the scale in the non-stochastic case. Any increasing transformation of a putative difference scale
+would predict the same ordering of the stimuli. In the stochastic case the observer may judge 
+that $a < b$ on some trials and that $b < a$ on others, and the degree of inconsistency in 
+judgment could potentially be used to estimate scale spacing using methods due to \citet{Thurstone1927}.
+Thurstone scales, however, have three major drawbacks. 
+First, the scale depends crucially on the assumed distribution of 
+judgment errors (it is not robust) while MLDS is remarkably robust \citep[see][]{MalYang03}. 
+Second, stimuli must be spaced closely enough so that the observer's judgments will frequently 
+be inconsistent. This typically means that many closely-spaced stimuli must be scaled, and 
+the number of trials needed to estimate the scale is much greater than in MLDS. 
+The third drawback is the most serious. 
+It is not obvious what the Thurstonian scale measures, at least not without further 
+assumptions about how ``just noticeable differences'' add up to produce perceptual differences.  
+The MLDS scale based on quadruples is immediately interpretable in terms of perceived 
+differences in interval lengths since that is exactly what the observer is judging.
+
+
+\section[Package MLDS]{Package \pkg{MLDS}}
+
+The package \pkg{MLDS} includes the function \code{mlds} for estimating a
+perceptual difference scale by MLDS, and the function \code{simu.6pt} for
+performing the six-point test as described above.
+
+\subsection[Fitting with mlds]{Fitting with \code{mlds}}
+
+The first argument of \code{mlds} is the data frame containing
+the results from a difference scaling experiment. The function expects the
+data to be organized as $n \times 5$ columns. Each row represents one trial.
+The  first column named \code{resp}, of either type logical or a vector of $0
+$s and $1$s, gives the responses of the observer. The next four, named %
+\code{S1}, \code{S2}, \code{S3} and \code{S4} indicate the indices of the
+four stimuli comprising the quadruple for that trial.
+
+Frequently, the data from an experiment are ordered to indicate the
+positioning of the stimuli in the experiment and not the physical ordering
+of the stimuli, as \code{mlds} expects. For example, a trial 
+\begin{Scode}{echo=FALSE}
+c(resp = 1, S1 = 7, S2 = 9, S3 = 2, S4 = 4)
+\end{Scode}
+might indicate that the stimulus pair $(7, 9)$ was presented below and pair  
+$(2, 4)$ above and that the observer chose the second pair as showing the
+greater  difference. The function \code{SwapOrder} will check for such
+inversions and  outputs a new data frame with the orders sorted and the
+responses inverted in  case of inversion. If the results of \code{SwapOrder}
+are stored in the original  variable, the original ordering is lost to
+subsequent applications.
+
+An object of class \class{mlds.df} is defined to be a data frame from a
+difference scaling  experiment, as described above but with attributes, 
+\class{invord} and \class{stimulus}.  Attribute \class{invord} is a logical vector
+indicating whether the order was reversed  in the original experiment. %
+\code{SwapOrder} checks whether its input is  of class  \class{mlds.df} and if
+so, uses the ``invord'' attribute to re-order the data.  In this case,
+successive applications flip the ordering back and forth  between that of
+the experimental and sorted state.
+The results from several experiments can be combined into a single object
+of class  \class{mlds.df}  using the mlds.df method \code{rbind}, which concatenates
+the \class{invord} attributes as well as the rows of the data frame.  
+
+The second argument of \code{mlds} indicates the physical stimulus levels 
+to which the indices in the data refer. If \code{NULL}, (the default),  then
+it is set to either  a sequence from 1 to the maximum index level in the
+data or  a numeric vector stored as the attribute \class{stimulus}, if present.
+
+\code{mlds} uses \code{glm} by default, but \code{optim} may be chosen  with
+the argument \code{method}. If the default is chosen, then  the data are
+transformed to the design matrix within \code{mlds}  using the function %
+\code{make.ix.mat}. \code{ix.mat2df} performs  the inverse transformation. 
+If \code{optim} is chosen, its method  defaults to \code{BFGS} but may be
+modified with the argument \code{opt.meth}.  Using \code{optim} requires
+initial estimates passed through the argument  \code{opt.init}. The default
+link is \code{probit} but this  may be modified to alternative links from the
+binomial family or  a user-defined link (\proglang{R}~2.4.0 or greater) with
+the argument \code{lnk}.  Additional named arguments will be passed along
+to \code{glm} or \code{optim}  through the \code{...} argument.
+
+\code{mlds} produces an object of class \class{mlds} which is a list of components:   
+\code{pscale}, a numeric vector containing the estimated perceptual scale,  %
+\code{stimulus}, a numeric vector of the physical scale,  \code{sigma}, the
+value of $\sigma$ (always 1 for \code{method = "glm"}), \code{link}, a character
+string indicating the link used and \code{method}, a character string
+specifying the method used. For \code{method = "optim"}, there are also, the log
+likelihood, Hessian, data frame and convergence condition returned in
+components \code{logLik}, \code{hess}, \code{data} and \code{conv},
+respectively. For \code{method = "glm"}, the component \code{obj} contains the \class{glm}
+object from the fit which is used by the \class{mlds} methods to extract the
+information provided in the additional components when \code{optim} is specified.
+
+There are seven methods currently defined for objects of class \class{mlds}: %
+\code{print}, \code{summary}, \code{plot}, \code{fitted}, \code{predict}, %
+\code{logLik} and \code{AIC}. The \code{plot} method generates a graph of
+the estimated perceptual scale as a function of the physical stimulus.
+The function \code{boot.mlds} is provided  to estimate standard errors
+for each scale value using a resampling procedure \citep{EfrTib93}.
+In short, the fitted probabilities are used to generate new responses
+to the trials with the function \code{rbinom}.  The estimated scale values for
+the new responses provide a bootstrap sample.  In a similar manner, the
+function \code{binom.diagnostics} allows running two diagnostics based on
+bootstrap replications of the residuals in order to evaluate the suitability
+of the model.
+
+For \code{method = "glm"}, the model formula used is 
+\begin{Code}
+resp ~ . - 1
+\end{Code}
+There is no \code{update} method defined currently for \code{mlds}. However,
+for the default method, the glm object is stored in the returned object as
+an element named \code{obj}. This object may be updated if care is taken
+also to include the data in the call, since ordinarily the data frame passed
+to the glm call is only visible within \code{mlds}. For example, if  
+\code{x.mlds} is an object of class \class{mlds} obtained with the default
+method, one can try  
+\begin{Code}
+with(x.mlds, update(obj, .  ~ . + 1, data = obj$data))
+\end{Code}
+to obtain a model with an intercept term.
+
+\subsection[Running a six-point test with simu.6pt]{Running a six-point test with \code{simu.6pt}}
+
+The initial step in performing a six-point test requires identifying all of
+the six-point conditions in the experimental data. The function %
+\code{Get6pts} takes an object of class \class{mlds} and returns a list of
+three data frames, with an attribute ``indices'' which is a fourth
+data frame. The three data frames are named \code{A}, \code{B} and \code{E}
+(the last to avoid the \proglang{R} function names \code{C} and \code{D}). All of
+these data frames have the same number of rows, and corresponding rows of %
+\code{A}, \code{B} and \code{E} provide six-point cases for evaluation. The
+data frame attribute provides indices from the original data set, that from
+which the \class{mlds} object was generated, to the rows at which each trial
+occurred. For example, for the difference scale fit to the data set %
+\code{AutumnLab} included in the package, row 4 of the three data frames
+generated by \code{Get6pts} is 
+\begin{Scode}{echo = FALSE}
+data(AutumnLab)
+x.mlds <- mlds(AutumnLab)
+x.6pt <- Get6pts(x.mlds, nrep = 1)
+t(sapply(x.6pt, function(x) x[4, ]))
+\end{Scode}
+\code{A} gives the comparisons $(a, b ; a^{\prime}b^{\prime})$, \code{B} $%
+(b, c ; b^{\prime}, c^{\prime})$ and \code{E} $(a, c; a^{\prime}c^{\prime})$%
+. Note that whether or not this example corresponds to a violation of the
+six-point condition depends on the differences between  the perceptual scale
+values to which these indices correspond. Row 4 of  the attribute is
+ \begin{Scode}{echo = FALSE}
+unlist(attr(x.6pt, 'indices')[4, ])
+\end{Scode}
+which are the rows of \code{AutumnLab} from which the three trials of the
+six point condition were extracted.
+
+\section{Example: Perception of correlation in scatterplots}
+The study of graphical perception for enhancing data presentation has been of
+interest to statisticians, at least, since the pioneering work of Cleveland and colleagues
+\citep{Cleve84a}.  Scatterplots have often been the subject of investigation, for
+example, to determine the characteristics that best reveal the underlying association in the
+data \citep{Cleveetal82} or the visual parameters that create the most salient differences
+between overlaid data sets \citep{Cleve84b}.  Only a few studies have examined the
+sensitivity of human observers to statistical differences in scatterplots 
+\citep[see, for example,][]{Leggeetal89}.  MLDS offers a promising method for
+approaching such questions.
+
+\subsection{A psychophysical experiment}
+Executing  
+\begin{verbatim}
+runQuadExperiment(DisplayTrial = "DisplayOneTrial", 
+	DefineStimuli = "DefineMyScale")
+\end{verbatim}
+ runs 330 trials 
+of the difference scaling
+experiment  and records the observer's responses interactively on each trial for the
+scatterplot example of Figure~\ref{Rscale}.  
+The stimulus from an example trial is shown in Figure~\ref{DSexamp}.  
+The observer's task is to decide whether the difference in $r$ is greater
+between the lower pair or the upper and to enter a \code{1} or \code{2}, respectively,
+from the keyboard.
+This function
+can be readily modified to any difference scaling application by defining
+the functions \code{DefineStimuli}  and  \code{DisplayTrial} that define the stimuli
+and display the quadruples, respectively, of non-overlapping intervals on each trial.
+After the observer has completed the
+experiment, an object of class ``mlds.df'' is returned which can be used
+for further analysis.  To preserve its attributes, it should be saved with 
+\code{save} or \code{dput}.
+
+One of the authors ran the experiment on himself three times, with
+the results stored in objects \code{kk1}, \code{kk2} and \code{kk3}.
+ Each of the runs of  330
+trials required less than 12 minutes to complete.  
+After loading the three data sets in memory, we merge them into one object
+of 990 trials with \code{rbind} and apply \code{SwapOrder} to put the
+stimulus in physical order.
+\begin{Scode}
+data(kk1)
+data(kk2)
+data(kk3)
+kk <- SwapOrder(rbind(kk1, kk2, kk3))
+\end{Scode}
+
+\subsection{Estimating a perceptual scale}
+For comparison, we fit the
+data by \code{mlds}  using both \code{glm} and \code{optim} methods.  
+Using  \code{method = "optim"} is usually slower.  
+\begin{Scode}
+kk.mlds <- mlds(kk)
+summary(kk.mlds)
+kkopt.mlds <- mlds(kk, method = "optim", opt.init = c(seq(0, 1, len = 11), 0.2))
+summary(kkopt.mlds)
+\end{Scode}
+ Note the differences in the summaries.
+The glm method fixes $\sigma = 1$ and does not constrain the upper range
+of scale values.  The \code{optim} method fixes the extreme values of the scale
+to 0 and 1.  Differences in the log likelihood can result because with the
+\code{optim} method, we have constrained the estimated scale values to be in
+$(0, 1)$.   These are usually quite small, as here, unless \code{optim} has 
+found a local minimum.  This also accounts for
+the slight discrepancy between the \code{optim} value of $\sigma = $  
+0.175
+and the reciprocal of the maximum scale value using \code{method = "glm"}, 
+0.179.  
+
+We compare the two estimated scales in Figure~\ref{figplot}  by first normalizing
+the scale estimated by \code{glm} by its maximum scale value.  This is easily
+accomplished by setting the argument \code{standard.scale = TRUE} in the plot method.
+The \code{glm} and \code{optim} scales are shown as points and lines, respectively, and it is
+clear that any differences between the two are unimportant.
+ Note that the
+resulting perceptual scale is almost flat for correlations up to 0.3. If we
+plot the estimated scale instead as a function of squared correlation 
+$r^2$ we see that for correlations above 0.4, the
+observer's judgment effectively matches $r^2$, the variance accounted for. 
+Below this value, the observer seems unable to discriminate scatterplots.  
+
+\begin{figure}[ht!]
+\centering
+\includegraphics{Figures/KM_JSS-014}
+\caption{Left.  Estimated difference scale for observer KK, from 990 judgments,
+distributed over 3 sessions for judging differences of correlation between scatterplots.
+The error bars correspond to twice the standard deviation of the bootstrap samples.
+Right.  The same scale values plotted as a function of the squared correlation or variance accounted
+for.  The diagonal line through the origin has unity slope.}
+\label{figplot}
+\end{figure}
+
+We have noticed that using \code{glm} can frequently generate a warning message
+\begin{Code}
+Warning message:
+fitted probabilities numerically 0 or 1 occurred in: glm.fit(x = X, y = Y, 
+weights = weights, start = start, etastart = etastart,  
+\end{Code}
+There are several possible sources of this warning.  The obvious possibility that
+the fit has perfectly separated the responses of the observer to scale differences
+can be discounted by examining the fitted probabilities as a function of the
+observer's responses.  For example, Figure~\ref{overlap} demonstrates the
+overlap of responses 
+for the \code{kk2} and \code{AutumnLab} data sets, both of which generate this
+warning.  The warning can be generated as well if  just some of the fitted
+probabilities are effectively a 0 or 1.  We can imagine this occurring if some of the intervals
+that the observer must differentiate are so large that  errors are never made.
+This indeed may occur when comparing large and small suprathreshold differences,
+as here, and, in fact, can be taken as an indication that the observer does
+exploit an internal scale when making judgments. It is pertinent to note
+that this warning disappears for the fit to both of these data sets if the
+link is changed to either \code{logit} or \code{cauchit}, suggesting that the
+shape of the psychometric function could be at issue, here.  These
+link functions differ primarily in the tails of the corresponding distributions.
+
+\begin{figure}[htb!]
+\begin{center}
+\includegraphics{Figures/KM_JSS-015}
+\caption{Fitted probabilities as a function of observer's response for the \code{kk2}
+and \code{AutumnLab} data sets.}
+\label{overlap}
+\end{center}
+\end{figure}
+
+A third possibility could arise
+from unpatterned response  errors (the observer pressed the wrong key in recording his
+judgment on some trials).  This can
+produce the Hauck-Donner phenomenon \citep{HD77,VR02}.  In that case,
+the Wald approximation to the log-likelihood may be quite poor.  The profile plots
+for the coefficients are curved in the above two data sets, and especially so for the
+larger coefficients. Under these circumstances, It may be preferable to use \code{optim}
+to estimate the scale by direct maximization of the likelihood \citep{VR02},
+and a bootstrap approach to estimate standard errors.  Collecting more data 
+is recommended to address this warning, and we find that the warning disappears
+for \code{kk2} if we combine it with either of the other two replications.  Despite the
+warning, the estimated scales using \code{glm} or \code{optim} are nearly 
+the same. 
+
+
+\subsection{Bootstrapping standard errors}
+%bootstrap sd's
+Bootstrap standard errors of the scale values are obtained with the
+function \code{boot.mlds}.  Running 10000 trials on the dataset \code{kk}
+required about 14 minutes on a 2.16~GHz Mac Intel Pro 
+with 2~Gb of memory.  A list is returned with 4 components,
+as indicated by applying \code{str},  below. The first, \code{boot.samp},
+is a matrix of the bootstrapped scale values.  The means and standard deviations
+are indicated in vectors \code{bt.mean} and \code{bt.sd}, respectively.
+
+\begin{CodeChunk}
+\begin{CodeInput}
+kk.bt <- boot.mlds(kk.mlds, 10000)
+str(kk.bt)
+\end{CodeInput}
+\begin{CodeOutput}
+List of 4
+ $ boot.samp: num [1:11, 1:10000]  0.00000 -0.02075  0.00361 -0.01485  ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:11] "" "stim.2" "stim.3" "stim.4" ...
+  .. ..$ : NULL
+ $ bt.mean  : Named num [1:11]  0.00000 -0.00876  0.00710 -0.01630  ...
+  ..- attr(*, "names")= chr [1:11] "" "stim.2" "stim.3" "stim.4" ...
+ $ bt.sd    : Named num [1:11] 0.0000 0.0245 0.0252 0.0278 0.0246 ...
+  ..- attr(*, "names")= chr [1:11] "" "stim.2" "stim.3" "stim.4" ...
+ $ N        : num 10000
+\end{CodeOutput}
+\end{CodeChunk}
+Twice the bootstrap errors are indicated as error bars in the left graph of
+ Figure~\ref{figplot}.
+
+\subsection{Goodness of fit}
+
+A first qualitative test of the validity of the estimated scale is to compare it with the
+actual stimuli to determine if it does, in fact, capture the perceptual variation displayed.
+For example, examination of the stimuli and the estimated scale in Figure~\ref{Rscale} 
+confirms that the initial flat part of the scale corresponds to a range of stimuli that
+are difficult to distinguish and that subsequent stimuli do appear to increase in 
+correlation, as the scale indicates.  The quadratic dependence of the increasing
+part of the scale probably cannot be detected in this fashion.  Estimated scales that
+do not display such \emph{face validity} should certainly be re-examined.
+
+Several approaches have been suggested to analyze the appropriateness of the model
+for binary data.  For comparison, we will consider analyses of the \code{kk} data set
+with the probit (default, already calculated above), logit and cauchit links.
+
+\begin{Scode}{}
+kk.mlds.logit <- mlds(kk, lnk = "logit")
+kk.mlds.cauchit <- mlds(kk, lnk = "cauchit")
+\end{Scode}
+
+When \code{method = "glm"} is used, it is easy to extract the residual and null deviances
+from the model object component to calculate a deviance accounted for (DAF), analogous
+to an $R^2$ calculated for linear models \citep[p.~84]{Wood06}.  For example,
+\begin{verbatim}
+(kk.mlds$obj$null.deviance - deviance(kk.mlds$obj))/kk.mlds$obj$null.deviance
+\end{verbatim}
+for the probit link.  The results for the three link functions, given in Table~\ref{GOF} in
+the first column, indicate a negligible superiority of the other two links over the default.
+
+\begin{table}[htdp]
+\begin{center}
+\begin{tabular}{l||crc}
+link & DAF & AIC & Pr(Runs) \\ \hline 
+probit & 0.55 & 633 & 0.02 \\
+logit & 0.57 &610  & 0.22 \\
+cauchit & 0.57 &611  & 0.07\\
+\end{tabular}
+\caption{\label{GOF} Goodness of fit.}
+\end{center}
+\end{table}%
+
+The second column of Table~\ref{GOF} displays the AIC values for each link function, obtained with
+the \code{AIC} method applied to each model object.  The logit link shows a more decided advantage
+over the probit, in this case.  
+
+\citet{Wood06} proposed two diagnostics for evaluating the suitability of the model fit to the data,
+each one based on the distribution of the deviance residuals of the fit.  
+The first involves a comparison of the empirical distribution of the residuals to
+an envelope of the $1 - \alpha$ proportion of the bootstrap-generated residuals. 
+The second tests the dependence of the residuals by comparing the number of
+runs of positive and negative values in the sorted deviance residuals with 
+the distribution of runs from the bootstrapped residuals.  
+
+\begin{figure}[htbp]
+\begin{center}
+\begin{tabular}{c}
+\includegraphics{Figures/KM_JSS-019}
+%\includegraphics[width=0.8\textwidth]{K__JSS-019}
+\\
+\includegraphics{Figures/KM_JSS-020}
+%\includegraphics[width=0.8\textwidth]{K__JSS-020}
+\\
+\includegraphics{Figures/KM_JSS-021}
+%\includegraphics[width=0.8\textwidth]{K__JSS-021}
+\end{tabular}
+\end{center}
+\caption{Diagnostic graphs produced by \code{plot.mlds.diag} for the models fit
+with the three link functions.  The left graphs show the empirical cdf of the deviance
+residuals (black points) compared to the 95\% bootstrapped envelope (blue lines).
+The right graphs display a histogram of the number of runs in the sign of the sorted deviance
+residuals from the bootstrap simulations.  The observed value is indicated by
+a vertical line.}
+\label{diagnostics}
+\end{figure}
+
+We provide a function \code{binom.diagnostics} to implement both of these for
+objects of class  \class{mlds}.  The function takes two arguments:  \code{obj}, an \class{mlds}
+model object and \code{nsim}, the number of bootstrap simulations to run.  For example,
+\begin{verbatim}
+kk.diag.prob <- binom.diagnostics(kk.mlds, 10000)
+\end{verbatim}
+performs 10000 simulations.
+An object of class \class{mlds.diag} is returned that is a list of 5 components, illustrated
+below for the \code{probit} link.
+\begin{verbatim}
+R> str(kk.diag.prob)
+
+List of 5
+ $ NumRuns  : int [1:10000] 195 193 205 199 177 177 201 211 187 209 ...
+ $ resid    : num [1:10000, 1:990] -5.25 -4.79 -4.77 -4.56 -4.52 ...
+ $ Obs.resid: Named num [1:990]  0.458  0.164  0.413  1.155 -1.610 ...
+  ..- attr(*, "names")= chr [1:990] "1" "2" "3" "4" ...
+ $ ObsRuns  : int 173
+ $ p        : num 0.0159
+ - attr(*, "class")= chr [1:2] "mlds.diag" "list"
+ \end{verbatim}
+\code{NumRuns} is a vector of integer giving the number of runs in the sorted
+deviance residuals for each simulation. \code{resid} is a matrix of numeric,
+each row of which contains the sorted deviance residuals from a simulation.
+\code{Obs.resid} is a vector of numeric providing the residuals from the obtained
+fit.  \code{ObsRuns} is the number of observed runs in the sorted deviance residuals, and
+finally \code{p} gives the proportion of runs from the simulations less than the observed
+number.  A \code{plot} method is supplied to visualize the results of the two analyses
+which are shown in Figure~\ref{diagnostics} for each of the link functions.
+
+The distributions of the residuals for the probit and logit links seem reasonable,
+based on 10000 simulations.
+Tendencies toward deviation from the envelopes are small, in any case.  These contrast
+with the cauchit link, that displays systematic deviations from the bootstrapped envelope.
+
+The histograms indicate that there are too few runs in the residuals using the probit link.
+For the logit, the observed number falls well within the distribution of bootstrapped values,
+while the cauchit value, given its performance with the previous diagnostic,
+is debatable.  The proportion of simulated runs less than
+the observed value for each link is given in the third column of Table~\ref{GOF}.
+
+Two points on the far left of the cdf's of Figure~\ref{diagnostics} stand out as having 
+unusually large residual deviances.  
+These points, as well as a third one, are flagged, also, by the diagnostics 
+generated by the glm \code{plot} method.  The three trials are simply extracted
+from the data set.
+\begin{Scode}{}
+kk[residuals(kk.mlds$obj) < -2.5, ]
+\end{Scode}
+Interestingly, if these points are removed from the data set, the value of 
+\code{p} for the probit link increases to the value of 0.24, more in line with that obtained using
+the logit link.  The number of runs does not change in the observed data, but 
+the bootstrapped distribution of the number of runs shifts to a mean near 171.
+
+Judging from the estimated scale as well as the stimuli, it seems surprising that
+the observer would have judged the correlation difference between 0 and 0.1 to be
+greater than that of 0.3 (or 0.4) and 0.9.  We suspect that these correspond to
+non-perceptual errors on the part of the observer, such as fingerslips, lack
+of concentration or momentary confusion about the instructions.  A few such
+errors nearly always occur in psychophysical experiments, even with practiced and
+experienced observers.  In modeling data from detection experiments, it has proven useful
+to include a nuisance parameter to account for these occasional errors \citep{WichHill01}.
+
+The error rates are modeled by modifying the lower and upper asymptotes of
+the inverse link function.  We can get a sense of the impact of adding these two nuisance
+parameters by using links \code{mafc.probit} and \code{probit.lambda} from
+the \pkg{psyphy} package, which permit specifying these asymptotes differently from 0 and 1 \citep{psyphy}.  Preliminary experimentation on the full data set indicates that the
+AIC is reduced by 48 if the lower estimate is set to about 0.06 and the upper
+to 0.007.  These values also lower the number of runs in the distributions of bootstrapped
+residuals, so that the observed value yields a \code{p} $ = 0.7$.
+
+\subsubsection{Bias-reduced MLDS}
+When using the default argument \code{method = glm} with \code{mlds}
+a method argument can be passed to \code{glm} with the argument
+\code{glm.meth}.  Its default value is ``glm.fit'' but other methods 
+are possible.  For example, the \pkg{brglm} \citep{Kosmidis2007}
+ package contains the
+function \code{brglm.fit} that peforms a bias-reduced fit based on 
+\citet{Firth93}.  For example,
+\begin{Scode}{eval=FALSE}
+library(brglm)
+mlds(kk2, glm.meth = brglm.fit)
+\end{Scode}
+
+\subsection{The six-point test}
+  
+Performing a six-point test  on these data with 10000 simulations
+ requires about 15 minutes on the same machine indicated above.
+\begin{CodeChunk}
+\begin{CodeInput}
+kk.6pt <- simu.6pt(kk.mlds, 10000)
+str(kk.6pt}
+\end{CodeInput}
+\begin{CodeOutput}
+List of 4
+ $ boot.samp: num [1:10000] -488 -539 -531 -502 -447 ...
+ $ lik6pt   : num -425
+ $ p        : num 0.848
+ $ N       :num 10000
+\end{CodeOutput}
+\end{CodeChunk}
+
+Examination of  the structure of the returned list  with \code{str} shows the p-value and log-likelihood 
+for the number of violations of the six-point test from the data and indicates that
+the observer did not make a significantly greater number of six-point violations
+than an ideal observer. 
+Figure~\ref{boot6pt} shows a histogram of the log-likelihoods
+from such a simulation with the observed log-likehood indicated by a thick vertical
+line. These results support the appropriateness of the scale as a
+ description of the observer's judgments.
+
+\begin{figure}[htb!]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{Figures/boothist}
+\caption{Histogram of log-likelihood values from the six-point test to data set \code{kk}.
+The thick vertical line indicates the observed six-point likelihood on the data set.}
+\label{boot6pt}
+\end{center}
+\end{figure}
+
+\subsection{Fitting a parametric difference scale}
+The results of the difference scaling experiment with scatterplots suggest that
+the perception of correlation increases quadratically with correlation 
+(Fig.~\ref{figplot}).  We can
+refit the data but constraining the estimated difference scaling curve to
+be a parametric curve, such as a power function, using the formula
+method for \code{mlds}.  Under the hypothesis that perception of
+correlation depends on $r^2$, 
+we would expect the exponent to be approximately $2$.
+\begin{Scode}{keep.source=TRUE}
+kk.frm <- mlds(~ (sx/0.98)^p[1], p = c(2, 0.2), data = kk)
+\end{Scode}
+We specify the parametric form for the difference scale with a
+one-sided formula. The operations take on their mathematical meaning here,
+as with formulae for \code{nls} but not as for
+\code{lm} and \code{glm} without isolation.
+ The stimulus scale is indicated by a variable \code{sx}
+and the parameters to estimate by a vector, \code{p}.  
+The fitting procedure
+adjusts the parameters to best predict the judgments of the observer
+on the standard scale.
+The equation is normalized by the highest value tested
+along the stimulus dimension, $r = 0.98$ so that the fitted
+curve passes through $1.0$ at this value.
+The optimization is performed by \code{optim} and initial values of the 
+parameters are
+provided by a vector given as an argument in the second position.
+The last element of this vector is always the initial value for \code{sigma}.
+Finally, a data frame with the experimental results is, also, required.
+
+The estimated parameters are returned in a component \code{par} of
+the model object and the judgment variability, as usual, in the component
+\code{sigma}.  Standard errors for each of these estimates can be obtained
+from the Hessian matrix in the \code{hess} component.
+\begin{Scode}{}
+c(p = kk.frm$par, sigma = kk.frm$sigma)
+sqrt(diag(solve(kk.frm$hess)))
+\end{Scode}
+The standard error for the exponent provides no evidence to reject
+an exponent of $2$.  
+
+The parametric fit with 
+$2$~parameters is nested within the $10$~parameter nonparametric
+fit.  This permits us to test the parametric fit with a likelihood ratio test.
+We extract the log likelihoods from each model object with the
+\code{logLik} method.
+The degrees of freedom of each fit are obtained from the ``df'' attribute
+of the ``logLik'' object.
+\begin{Scode}{keep.source=TRUE}
+ddf <- diff(c(attr(logLik(kk.frm), "df"), 
+	attr(logLik(kk.mlds), "df")))
+pchisq(-2 * c(logLik(kk.frm) - logLik(kk.mlds)), 
+	ddf, lower.tail = FALSE)
+\end{Scode}
+The results reject the power function description of the data.  
+A predicted curve under the parametric model fit to the
+data is obtained from the \code{func} component of the
+model object, which takes two arguments: the estimated
+parameters, obtained from the \code{par} component of the model object and
+a vector of stimulus values for which to calculate predicted values.
+The plot of the predicted values against the values obtained by \code{glm}
+indicates that the power function fit provides a reasonable 
+description of the data for correlations greater than 0.4 and a
+ lack of fit for lower correlations, for which this observer shows no
+evidence of discrimination (Fig.~\ref{fig:mldsFormMeth}).
+\begin{figure}[h!]
+\begin{center}
+\setkeys{Gin}{width=0.65\textwidth}
+\begin{Scode}{fig=TRUE,eps=FALSE,keep.source=TRUE}
+plot(kk.mlds, standard.scale = TRUE,
+	xlab = expression(r^2),
+	ylab = "Difference Scale Value")
+xx <- seq(0, 0.98, len = 100)
+lines(xx, kk.frm$func(kk.frm$par, xx))
+\end{Scode}
+\setkeys{Gin}{width=0.8\textwidth}
+\caption{Difference scales estimated for the perception of correlation obtained
+using the default (points) and formula (line) methods to fit the data. 
+The formula used was a power function.}
+\label{fig:mldsFormMeth}
+\end{center}
+\end{figure}
+
+\section{The Method of Triads}   
+
+
+In the Method of Quadruples, observers compare interval $(a,b)$ and $(c,d)$ and 
+it is not difficult 
+to see how the resulting difference scale would lend itself to predicting such judgments. We can also
+use a slightly restricted method for presenting stimuli that we refer to as the Method of Triads.  On each
+ trial, the observer sees three stimuli $(a,b,c)$ with $a<b<c$  and judges whether or not $(a,b) \succ (b,c)$. The observer 
+is still judging the perceived size of intervals but now the intervals judged share a common end point $b$.
+Despite this apparent limitation, difference scales estimated using the Method of Triads exhibit about the same
+variability and lack of bias as difference scales estimated using the Method of Quadruples if the total number
+of judgments is the same. 
+
+The change in method entails a change in the design matrix given
+that stimulus $b$ participates in the comparison of both intervals.  The
+decision variable for a triad experiment is modeled as
+\begin{equation}
+(\psi_b - \psi_a) - (\psi_c - \psi_b) = 2 \psi_b - \psi_a - \psi_c,
+\end{equation}
+so that the design matrix has non-zero entries of $(-1, 2, -1)$.  
+The data frame from an experiment has only 4 instead of 5 columns,
+indicating the response and the indices for the three stimuli on each trial.
+The \pkg{MLDS} package includes a function \code{RunTriadExperiment}
+that works similarly to \code{RunQuadExperiment}, but presents triads
+on each trial and returns an object of class ``mlbs.df''.  
+The \code{mlds} function is generic and methods are supplied for
+both classes of object.  The user need only supply the results
+of either type of experiment and the function dispatches to the correct
+method to return the results.
+
+The experimenter is free to choose whichever method proves to be more 
+convenient if, for example, it is easier to fit three stimuli simultaneously on an experimental display than four.
+For $p>3$ stimuli, there are 
+\begin{equation}
+\left( 
+\begin{array}{c}
+p \\ 
+3
+\end{array}
+\right) =\frac{p!}{3!\:(p-3)!}
+\end{equation}
+possible non-overlapping triads.
+If $p=11$, as in the example, there are 
+\begin{equation}
+\left( 
+\begin{array}{c}
+11 \\ 
+3
+\end{array}
+\right) =\frac{11!}{3!\:8!}=165
+\end{equation}
+different, non-overlapping triads. 
+Of course, the
+number of trials judged by the observer affects the accuracy of the estimated
+difference scale (See Maloney and Yang \cite{MalYang03}) as we illustrate below.The time
+needed  to judge two repetitions of all 165 trials with triads (330 trials total) is the number of trials
+for one repetition of all trials with non-overlapping quadruples. 
+\section{Future directions}
+
+There are several directions in which \pkg{MLDS} might be developed, four
+of which will be mentioned here.
+
+First,
+we do not know what would be the most efficient choice of stimuli along a 
+continuum or of quadruples for 
+a particular application of MLDS. These depend on the observer's actual scale
+and judgment uncertainty $\sigma$, but given pilot data for the observer or previous
+results for other observers, it would be interesting to work out methods for selecting 
+stimuli and quadruples. For example, having seen the results for one observer in
+the scatterplot example, we might consider stimuli that are equally spaced along
+the scale $r^2$ and not the scale $r$ in future experiments.
+
+Second, we plan on developing a more systematic method of assessing the
+asymptotic probabilities of the inverse link function to take into account unsystematic
+errors by the observers.  
+The difficulty is that these parameters are not part of the linear predictor.
+One possibility is to profile the nuisance parameters (as we did here) or, alternatively,  to develop a
+ method that switches back and forth between adjusting the nuisance parameters 
+ and the coefficients of the linear predictor.
+
+Third, it would be useful to incorporate random effects that influence the scale when
+an observer repeats the experiment or to account for variations between individuals.  
+Such heterogeneity is, indeed, apparent if we compare the three scales
+obtained on different days in the data set \code{kk}.  For these data,
+there is only one random factor, the Run.  It might be possible to treat
+this as an effect due to a randomized block \citep[p.~295]{VR02}
+The ratio of the scale values between any of the two repetitions is
+approximately constant across the physical scale, however, which suggests that the 
+estimate of $\sigma$ across runs,
+or equivalently the maximum scale value, would be a more likely candidate to explain such
+a source of variability, but as a multiplicative rather than as an additive effect.  
+We develop some approaches to this problem using the \pkg{lme4}, elsewhere
+(Knoblauch and Maloney, \emph{Modeling Psychophysical Data in \proglang{R}},
+Springer, in preparation).
+
+%\section*{Computational details}
+%
+%The bivariate point distributions were generated
+%with the \code{mvrnorm} function from the package \pkg{MASS} (version 7.2-40)  \citep{VR02}.
+%The \pkg{ggplot} package (version 0.4.2) \citep{ggplot} was used to create Figure~\ref{overlap}.
+%All \proglang{R} code for generating the figures is available in an \proglang{R}
+%script along with this paper
+
+\section*{Acknowledgments}
+
+This research was funded in part by Grant EY08266 from the National Institute of Health (LTM). 
+
+\bibliography{MLDS}
+
+\end{document}
