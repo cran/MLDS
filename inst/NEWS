@@ -1,4 +1,4 @@
-
+q
 version 0.1-2
 
   made mlds generic and added default (for glm and optim) and formula
@@ -137,3 +137,9 @@ version 0.3-2
    removed LazyLoad from Description
 
    moved vignette from inst/doc to vignettes
+
+version 0-4.0
+
+  mlds.mlds.df and mlds.mlbs.df  changed so that model matrices constructed  
+  internally by formula objects and the model.matrix function.
+

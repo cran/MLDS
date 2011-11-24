@@ -9,81 +9,73 @@ function(x, stimulus = NULL, method = "glm",
 				epsilon = 1e-14), ...
 			) {
 	data <- x
-#data, data.frame from diff scale exp.
-#stimulus, physical levels
-	if (missing(stimulus)) {
-		if (inherits(data, "mlds.df")) {
-			stimulus <- attr(data, "stimulus")
-			} else
-		{stimulus <- seq(max(data))}
-		} 
-		
-	if (method == "glm") {
-		# set-up matrix
-		dsInc.df <- make.ix.mat(data)
-		psc.glm <- glm(resp ~ . - 1, 
-			family = binomial(link = lnk), 
-			data = dsInc.df, control = control, 
-			method = glm.meth, ...)
+	mx <- max(data[, -1])
+    	if (missing(stimulus)) {
+        if (inherits(data, "mlds.df")) {
+            stimulus <- attr(data, "stimulus")
+        }
+        else {
+            stimulus <- seq(mx)
+        }
+    }
+    	
+    if (method == "glm"){
+    	d <- within(data, {S1 <- factor(S1, levels = seq_len(mx))
+    			S2 <- factor(S2, levels = seq_len(mx))
+    			S3 <- factor(S3, levels = seq_len(mx))
+    			S4 <- factor(S4, levels = seq_len(mx))
+    		})
+    	m.lst <- lapply(names(d[, -1]), function(nm) {
+    			f <- as.formula(paste("~", nm))
+    			m <- model.matrix(f, d)
+    			if (nm %in% paste("S", 2:3, sep = "")) m <- -m
+    			m
+    		})
+ 		m <- Reduce("+", m.lst)
+		dsInc.df <- data.frame(resp = data[, 1], stim = m[, -1])
+		names(dsInc.df) <- c("resp", paste("stim", 2:mx, sep = "."))
+		psc.glm <- glm(resp ~ . - 1, binomial(link = lnk), data = dsInc.df,
+			control = control, method = glm.meth, ...)
 		psc.glm$call$family[[2]] <- lnk
-		psc.glm$call$control <- control #glm.control(maxit = 50000,
-#				epsilon = 1e-14)
-		psc.lst <- list(pscale = c(0, coef(psc.glm)), 
-			stimulus = stimulus,
-			sigma = 1, 
-			method = "glm", link = lnk,
-			obj = psc.glm
-			)
-	} else { # if method "optim"
-	diff.err <- function(x, d) {
- ### x <- perceptual scale and sd estimates
- ### d <- data.frame
- 
-		nlen <- length(x) + 1
-		n <- vector("numeric", nlen)
-		n[1] <- 0 ; n[nlen] <- 1
-		n[seq(2, nlen - 1)] <- plogis(x[seq(1, nlen - 2)])
-		s <- exp(x[nlen - 1])
-	
-		del <-  matrix(n[unlist(d[, -d$resp])],
-#		matrix(n[unlist(subset(d, select = -resp))], 
-				ncol = 4) %*% c(1, -1, -1, 1)
-		z <- del/s
-		fam <- binomial(link = lnk)
-		p <- fam$linkinv(z)
-		p[p < .Machine$double.eps] <- .Machine$double.eps
-		p[p > (1 - .Machine$double.eps)] <- 1 -.Machine$double.eps
-
-		-sum(log(p[d[, 1] == 1]), na.rm = TRUE) -
-			sum(log(1 - (p[d[, 1] == 0])), na.rm = TRUE)
-}
-	
-diff.sc <- function(n, s, d, opt.m = opt.meth) {
- ### n <- initial est. for perceptual scale
- ### s <- initial est. of sd
- ### d <- data.frame
-
- 	x <- qlogis(n) #values 2 to len - 1
- 	x[length(x) + 1] <- log(s)
-	 r.opt <- optim(x, diff.err, d = d, hessian = TRUE,
- 				method = opt.m,
-				control = list(maxit = 50000, abstol = 1e-14), ...)
- 	list(pscale = c(0, plogis(r.opt$par[-length(r.opt$par)]), 1),
- 		stimulus = stimulus,
- 		sigma = exp(r.opt$par[length(r.opt$par)]),
-		logLik = -r.opt$value, hess = r.opt$hessian,
-		method = "optim", link = lnk,
-		data = d,
-		conv = r.opt$convergence
-		)
-}
-	xi <- max(data)
-	psc.opt <- diff.sc(n = opt.init[2:(xi-1)], 
-					   s = opt.init[length(opt.init)], d = data)
-	psc.lst <- psc.opt
-	}
-class(psc.lst) <- "mlds"
-psc.lst			
+        psc.glm$call$control <- control
+        psc.lst <- list(pscale = c(0, coef(psc.glm)), stimulus = stimulus, 
+            sigma = 1, method = "glm", link = lnk, obj = psc.glm)
+      } else{ diff.err <- function(x, d) {
+            nlen <- length(x) + 1
+            n <- vector("numeric", nlen)
+            n[1] <- 0
+            n[nlen] <- 1
+            n[seq(2, nlen - 1)] <- plogis(x[seq(1, nlen - 2)])
+            s <- exp(x[nlen - 1])
+            del <- matrix(n[unlist(d[, -d$resp])], ncol = 4) %*% 
+                c(1, -1, -1, 1)
+            z <- del/s
+            fam <- binomial(link = lnk)
+            p <- fam$linkinv(z)
+            p[p < .Machine$double.eps] <- .Machine$double.eps
+            p[p > (1 - .Machine$double.eps)] <- 1 - .Machine$double.eps
+            -sum(log(p[d[, 1] == 1]), na.rm = TRUE) - sum(log(1 - 
+                (p[d[, 1] == 0])), na.rm = TRUE)
+        }
+        diff.sc <- function(n, s, d, opt.m = opt.meth) {
+            x <- qlogis(n)
+            x[length(x) + 1] <- log(s)
+            r.opt <- optim(x, diff.err, d = d, hessian = TRUE, 
+                method = opt.m, control = list(maxit = 50000, 
+                  abstol = 1e-14), ...)
+            list(pscale = c(0, plogis(r.opt$par[-length(r.opt$par)]), 
+                1), stimulus = stimulus, sigma = exp(r.opt$par[length(r.opt$par)]), 
+                logLik = -r.opt$value, hess = r.opt$hessian, 
+                method = "optim", link = lnk, data = d, conv = r.opt$convergence)
+        }
+        xi <- max(data)
+        psc.opt <- diff.sc(n = opt.init[2:(xi - 1)], s = opt.init[length(opt.init)], 
+            d = data)
+        psc.lst <- psc.opt
+      	
+      }
+		class(psc.lst) <- "mlds"
+ 	   psc.lst
 } 			
 
 `mlds.formula` <- 
@@ -149,34 +141,41 @@ function(x, p, data, stimulus = NULL,
 			lnk = "probit",
 			control = glm.control(maxit = 50000, 
         	epsilon = 1e-14), glm.meth = "glm.fit", ...) {
-    if (method != "glm") 
-    	stop("Only glm method currently defined for this class!\n")   
-    if (missing(stimulus)) {
-        if (inherits(x, "mlbs.df")) {
-            stimulus <- attr(x, "stimulus")
+   if (method != "glm") 
+        stop("Only glm method currently defined for this class!\n")
+    	x[attr(x, "invord"), -1]  <-  x[attr(x, "invord"), 4:2]
+    	x[attr(x, "invord"), 1]  <-  1 - x[attr(x, "invord"), 1] 
+    	data <- x
+    	if (missing(stimulus)) {
+        if (inherits(data, "mlbs.df")) {
+            stimulus <- attr(data, "stimulus")
         }
         else {
-            stimulus <- seq(max(x))
+            stimulus <- seq(max(data))
         }
     }
-   d <- x
-   N <- max(d[, -1], na.rm = TRUE)
-	bix.mat <- matrix(0, nrow = nrow(d), ncol = N)
-	for (ix in seq_len(nrow(d))) {
-		iy <- unlist(d[ix, -1])
-		bix.mat[ix, iy] <- c(1, -2, 1)
-	}
-	d[, 1] <- ifelse(d[, 2] > d[, 3], 1 - d[, 1], d[, 1])
-	d.bis <- data.frame(resp = d[, 1], S = bix.mat)
-	d.bis$S.1 <- NULL
-	out.bis <- glm(factor(resp) ~ . - 1, 
-		family = binomial(link = lnk), data = d.bis,
-		control = control, method = glm.meth, ...)
-	out.lst <- list(pscale = c(0, coef(out.bis)), 
-		stimulus = stimulus, sigma = 1, method = "glm",
-		link = lnk, obj = out.bis)
-    class(out.lst) <- "mlbs"
-    out.lst
+    	mx <- max(data[, -1])
+    	d <- within(data, {S1 <- factor(S1, levels = seq_len(mx))
+    			S2 <- factor(S2, levels = seq_len(mx))
+    			S3 <- factor(S3, levels = seq_len(mx))
+    		})
+    	m.lst <- lapply(names(d[, -1]), function(nm) {
+    			f <- as.formula(paste("~", nm))
+    			m <- model.matrix(f, d)
+    			if (nm == "S2") m <- -2 * m
+    			m
+    		})
+ 		m <- Reduce("+", m.lst)
+		dsInc.df <- data.frame(data[, 1], m[, -1])
+		names(dsInc.df) <- c("resp", paste("S", 2:mx, sep = ""))
+		psc.glm <- glm(resp ~ . - 1, binomial(link = lnk), data = dsInc.df,
+			control = control, method = glm.meth, ...)
+		psc.glm$call$family[[2]] <- lnk
+        psc.glm$call$control <- control
+        psc.lst <- list(pscale = c(0, coef(psc.glm)), stimulus = stimulus, 
+            sigma = 1, method = "glm", link = lnk, obj = psc.glm)
+		class(psc.lst) <- "mlbs"
+ 	   psc.lst
 }
 
 
