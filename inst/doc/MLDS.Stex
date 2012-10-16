@@ -173,6 +173,7 @@ $\left(a,b;c,d\right) $.
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics{Figures/KM_JSS-003}
+\end{Scode}
 \caption{An example of a trial stimulus presentation from the difference
 scaling experiment for estimating correlation differences in the scatterplot
 experiment.  The observer must judge whether the difference in perceived correlation

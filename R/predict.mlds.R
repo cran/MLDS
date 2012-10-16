@@ -8,6 +8,7 @@ function(object, newdata = NULL,
 		if (miss) {
 			ans <- predict(object$obj, type = type, ...) } else
 			{
+			if (length(newdata) == 5) newdata <- make.ix.mat(newdata)	
 			 ans <- predict(object$obj, newdata = newdata,
 			 	 type = type, ...)
 			}
@@ -34,7 +35,21 @@ function(object, newdata = NULL,
             ans <- predict(object$obj, type = type, ...)
         }
         else {
-            ans <- predict(object$obj, newdata = newdata, type = type, 
+        	mx <- max(newdata[, -1])
+    d <- within(newdata, {S1 <- factor(S1, levels = seq_len(mx))
+    		S2 <- factor(S2, levels = seq_len(mx))
+    		S3 <- factor(S3, levels = seq_len(mx))
+   		})
+   	m.lst <- lapply(names(d[, -1]), function(nm) {
+   			f <- as.formula(paste("~", nm))
+   			m <- model.matrix(f, d)
+   			if (nm == "S2") m <- -2 * m
+   			m
+    		})
+ 	m <- Reduce("+", m.lst)
+ 	dsInc.df <- data.frame(newdata[, 1], m[, -1])
+ 	names(dsInc.df) <- c("resp", paste("S", 2:mx, sep = ""))
+            ans <- predict(object$obj, newdata = dsInc.df, type = type, 
                 ...)
         }
 	as.vector(ans)

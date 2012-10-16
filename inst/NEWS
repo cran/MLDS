@@ -143,3 +143,8 @@ version 0-4.0
   mlds.mlds.df and mlds.mlbs.df  changed so that model matrices constructed  
   internally by formula objects and the model.matrix function.
 
+version 0-4.1
+
+  fixed bug in predict.mlds and predict.mlbs  when using newdata argument.
+  mlds now works for triads when only a subset of the data frame is used.
+

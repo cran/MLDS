@@ -143,10 +143,12 @@ function(x, p, data, stimulus = NULL,
         	epsilon = 1e-14), glm.meth = "glm.fit", ...) {
    if (method != "glm") 
         stop("Only glm method currently defined for this class!\n")
-    	x[attr(x, "invord"), -1]  <-  x[attr(x, "invord"), 4:2]
-    	x[attr(x, "invord"), 1]  <-  1 - x[attr(x, "invord"), 1] 
-    	data <- x
-    	if (missing(stimulus)) {
+   if (nrow(x) < length(attr(x, "invord")))
+   		 attr(x, "invord") <- attr(x, "invord")[1:nrow(x)]
+   x[attr(x, "invord"), -1]  <-  x[attr(x, "invord"), 4:2]
+   x[attr(x, "invord"), 1]  <-  1 - x[attr(x, "invord"), 1] 
+   data <- x
+   if (missing(stimulus)) {
         if (inherits(data, "mlbs.df")) {
             stimulus <- attr(data, "stimulus")
         }
@@ -154,28 +156,28 @@ function(x, p, data, stimulus = NULL,
             stimulus <- seq(max(data))
         }
     }
-    	mx <- max(data[, -1])
-    	d <- within(data, {S1 <- factor(S1, levels = seq_len(mx))
-    			S2 <- factor(S2, levels = seq_len(mx))
-    			S3 <- factor(S3, levels = seq_len(mx))
+    mx <- max(data[, -1])
+    d <- within(data, {S1 <- factor(S1, levels = seq_len(mx))
+    		S2 <- factor(S2, levels = seq_len(mx))
+    		S3 <- factor(S3, levels = seq_len(mx))
+   		})
+   	m.lst <- lapply(names(d[, -1]), function(nm) {
+   			f <- as.formula(paste("~", nm))
+   			m <- model.matrix(f, d)
+   			if (nm == "S2") m <- -2 * m
+   			m
     		})
-    	m.lst <- lapply(names(d[, -1]), function(nm) {
-    			f <- as.formula(paste("~", nm))
-    			m <- model.matrix(f, d)
-    			if (nm == "S2") m <- -2 * m
-    			m
-    		})
- 		m <- Reduce("+", m.lst)
-		dsInc.df <- data.frame(data[, 1], m[, -1])
-		names(dsInc.df) <- c("resp", paste("S", 2:mx, sep = ""))
-		psc.glm <- glm(resp ~ . - 1, binomial(link = lnk), data = dsInc.df,
-			control = control, method = glm.meth, ...)
-		psc.glm$call$family[[2]] <- lnk
-        psc.glm$call$control <- control
-        psc.lst <- list(pscale = c(0, coef(psc.glm)), stimulus = stimulus, 
-            sigma = 1, method = "glm", link = lnk, obj = psc.glm)
-		class(psc.lst) <- "mlbs"
- 	   psc.lst
+ 	m <- Reduce("+", m.lst)
+	dsInc.df <- data.frame(data[, 1], m[, -1])
+	names(dsInc.df) <- c("resp", paste("S", 2:mx, sep = ""))
+	psc.glm <- glm(resp ~ . - 1, binomial(link = lnk), data = dsInc.df,
+		control = control, method = glm.meth, ...)
+	psc.glm$call$family[[2]] <- lnk
+    psc.glm$call$control <- control
+    psc.lst <- list(pscale = c(0, coef(psc.glm)), stimulus = stimulus, 
+        sigma = 1, method = "glm", link = lnk, obj = psc.glm)
+	class(psc.lst) <- "mlbs"
+ 	psc.lst
 }
 
 

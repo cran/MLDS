@@ -1,4 +1,4 @@
-11ce731db0b765adecd2501e8f58df45 *DESCRIPTION
+7f05724f6c4c597e9f9728320d20ae47 *DESCRIPTION
 5e577071b5e825567c2b73807240b881 *MLDS-Ex.pdf
 1d7a268eb1ab87579cd439cdd6360431 *NAMESPACE
 0a8020fc5337a89f3343d28f583a5c9f *R/Get6pts.R
@@ -14,10 +14,10 @@ a4aeda1df770a6083cd7b6dd866f6fa2 *R/SwapOrder.R
 4a700dd00a5b7f7cbefba08b3603b3dc *R/lik6pt.R
 3843cfc5ac9df86619a209b2ad065191 *R/logLik.mlds.R
 cfb8ff04019e2b130c703b7aa8d52188 *R/make.ix.mat.R
-90adc101df6d832671a9366e48498f1e *R/mlds.R
+e0ecd2d8ef3d28130ccc647a749ae66a *R/mlds.R
 a8586aa8c0fa8ba72d22998d90222c25 *R/plot.mlds.R
 e41a90d4b8d5d4f4a32112587e545992 *R/pmc.R
-7fe5bf8bf2c1e026dd6e6b16b954ce3d *R/predict.mlds.R
+b8c7ad7c8ea7aa18e0f9b1d2730f0b63 *R/predict.mlds.R
 029a2c56097e841e388d254f61e4144e *R/print.mlds.R
 2c15504cc37767c6138dcdb827d321b8 *R/print.summary.mlds.R
 b1ffe8ef2d54ea5ee1b812559ff3870f *R/rbind.mlds.df.R
@@ -34,9 +34,9 @@ d76eb38a56d2092c6656a9da6fa2f2df *R/summary.mlds.R
 8bb5581841bdf2893fe5dcfcb5fb94cd *data/kk3.rda
 93a4184612c16ef6b4b9f72c8e2a47d2 *data/kktriad.rda
 61dd27c69a94e8815fc946a281f4e734 *inst/CITATION
-6ede706cacce08c02953c805fda31bd2 *inst/NEWS
-eb16417fd9b456be008f0edf66b896d0 *inst/doc/MLDS.Stex
-08bc633fea6059d1935675d0c639fc76 *inst/doc/MLDS.pdf
+592c02edcb9b61f756294596440cf961 *inst/NEWS
+592537e2b85296095e61b384c0f96912 *inst/doc/MLDS.Stex
+9edf2863bfdff605730d539012526758 *inst/doc/MLDS.pdf
 9fbba34d143da725f14478e40cf2f692 *man/AutumnLab.Rd
 5a57086b3069ef2a33b7804421e8e6fb *man/DisplayOneQuad.Rd
 77a88a98adc75fbcb7fc9853f4f56a06 *man/Get6pts.Rd
@@ -74,5 +74,5 @@ d89ff22dd73d900162036975e593234e *vignettes/Figures/KM_JSS-014.pdf
 9db67207afa255ff92e42fcd17b831bd *vignettes/Figures/KM_JSS-020.pdf
 153c63c512188071966ed798506cd05b *vignettes/Figures/KM_JSS-021.pdf
 d8bcf996bd956cbf30a9ff9a2200bc3c *vignettes/Figures/boothist.pdf
-eb16417fd9b456be008f0edf66b896d0 *vignettes/MLDS.Stex
+592537e2b85296095e61b384c0f96912 *vignettes/MLDS.Stex
 789c416c25cdaf351ff019f9b2bcc95a *vignettes/MLDS.bib
