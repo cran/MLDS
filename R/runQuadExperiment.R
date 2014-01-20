@@ -7,7 +7,7 @@ DisplayOneQuad <- function(rr, PntNum = 100, ptSize = 1,
 	xlim = c(-4, 4), ylim = c(-4, 4)) {
 	for (ix in 4:1) {
 		covm <- matrix(c(1, rep(rr[ix], 2), 1), 2, 2)
-		xy <- MASS:::mvrnorm(n = PntNum, rep(0, 2), covm, 
+		xy <- MASS::mvrnorm(n = PntNum, rep(0, 2), covm, 
 				empirical = TRUE)
 		plot(xy, axes = FALSE, xlab = "", ylab = "", pty = "s",
 			cex = ptSize, pch = 16, col = "black",
