@@ -138,7 +138,7 @@ physical scale.  An example of such a scale is shown as the twelfth graph
 in the figure. The example code is organized so that
 it can be readily adapted to other applications.
 
-\begin{figure}[htbp!]
+\begin{figure}[h]
 \begin{center}
 \setkeys{Gin}{width=0.95\textwidth}
 \includegraphics{Figures/KM_JSS-002}
@@ -493,7 +493,7 @@ consistent assignment of scale values $\psi_1, \psi_2, \ldots, \psi_p$  in a
 difference scaling model that could predict his or her judgments in a
 difference scaling task.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
 \centering
 \includegraphics{Figures/KM_JSS-005}
 \caption{Six-Point Condition:  Given stimuli $a < b < c$ and $a' < b < c'$ ordered along a scale,
@@ -510,7 +510,7 @@ distances on the left side of Figure~\ref{SixPtCurv} can be represented along a 
 \citep[see][Chapter 4, for further discussion]{Krantzetal71}.
 On the right side of Figure~\ref{SixPtCurv}, in contrast, judgments are based on chordal distances along an
 ellipse. The six-point condition fails and these judgments cannot be represented by a difference scale.
-\begin{figure}[htbp]
+\begin{figure}[h]
 \setkeys{Gin}{width=0.4\textwidth}
 \centering
 \begin{tabular}{ll}   
@@ -1009,7 +1009,7 @@ to an $R^2$ calculated for linear models \citep[p.~84]{Wood06}.  For example,
 for the probit link.  The results for the three link functions, given in Table~\ref{GOF} in
 the first column, indicate a negligible superiority of the other two links over the default.
 
-\begin{table}[htdp]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{l||crc}
 link & DAF & AIC & Pr(Runs) \\ \hline 
@@ -1033,7 +1033,7 @@ The second tests the dependence of the residuals by comparing the number of
 runs of positive and negative values in the sorted deviance residuals with 
 the distribution of runs from the bootstrapped residuals.  
 
-\begin{figure}[htbp]
+\begin{figure}[h]
 \begin{center}
 \begin{tabular}{c}
 \includegraphics{Figures/KM_JSS-019}

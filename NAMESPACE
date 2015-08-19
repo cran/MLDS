@@ -9,6 +9,15 @@ export(mlds, mlds.mlds.df, mlds.mlbs.df, mlds.formula,
 	runSampleExperiment
 	)
 
+importFrom("grDevices", "dev.new", "graphics.off")
+importFrom("graphics", "abline", "hist", "lines", "par", "plot",
+            "points")
+importFrom("stats", "as.formula", "binomial", "coef", "complete.cases",
+           "fitted", "glm", "glm.control", "glm.fit", "logLik",
+           "model.matrix", "optim", "plogis", "predict", "qlogis",
+           "rbinom", "residuals", "rnorm", "sd", "vcov")
+importFrom("utils", "combn")
+
 #S3method(AIC, mlds)
 #S3method(as, mlds.df)
 #S3method(as, mlbs.df)

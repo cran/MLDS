@@ -1,4 +1,4 @@
-q
+
 version 0.1-2
 
   made mlds generic and added default (for glm and optim) and formula
@@ -154,4 +154,8 @@ version 0-4.2
    in units of d'.
 
    removed some unnecessary triple colons in referencing packages
+
+version 0-4.4
+
+   fixed formatting error in vignette
 
