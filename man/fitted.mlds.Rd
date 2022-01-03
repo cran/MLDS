@@ -21,7 +21,7 @@
 \value{
  A numeric vector contained the fitted probabilities to the responses of the observer for each quadruple.
 }
-\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5. }
+\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \doi{10.1167/3.8.5}. }
 \author{Kenneth Knoblauch}
 \seealso{\code{\link{mlds}}, \code{\link{predict.mlds}}}
 \examples{

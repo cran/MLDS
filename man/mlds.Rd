@@ -66,10 +66,10 @@ A list of class \sQuote{mlds} whose components depend on whether the method was 
    \item{formula}{The one-sided formula specified with the \sQuote{method}.}
    \item{func}{For \sQuote{formula} method, a function obtained from the one-sided \code{formula}.}
 }
-\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5. 
+\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \doi{10.1167/3.8.5}. 
 
 Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference scaling in R. 
-\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \url{http://www.jstatsoft.org/v25/i02}.
+\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \doi{10.18637/jss.v025.i02}.
 }
 \author{Kenneth Knoblauch and Laurence T. Maloney}
 \note{ The glm method often generates warnings that fitted probabilities are 0 or 1. This does not usually affect the values of the estimated scale.  However, it may be wise to check the results with the optim method and obtain standard errors from a bootstrap method (see \code{\link{boot.mlds}}). The warnings will often disappear if the link is modified or more data are obtained. 

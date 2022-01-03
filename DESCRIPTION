@@ -1,8 +1,8 @@
 Package: MLDS
 Type: Package
 Title: Maximum Likelihood Difference Scaling
-Version: 0.4.5
-Date: 2015-08-19
+Version: 0.4.7
+Date: 2022-01-03
 Author: Kenneth Knoblauch and Laurence T. Maloney, 
   based in part on C code written by Laurence T. Maloney 
   and J. N. Yang
@@ -17,6 +17,6 @@ Description: Difference scaling is a method for scaling perceived
   internal validity of the estimated scale.
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2015-08-19 15:35:59 UTC; ken
+Packaged: 2022-01-03 14:46:53 UTC; ken
 Repository: CRAN
-Date/Publication: 2015-08-19 18:38:35
+Date/Publication: 2022-01-03 15:30:06 UTC

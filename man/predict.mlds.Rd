@@ -24,7 +24,7 @@
 \value{
  A numeric vector of the predicted values either on the scale of the linear predictor or on the response scale.
 }
-\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5.}
+\references{ Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585,  \doi{10.1167/3.8.5}.}
 \author{Kenneth Knoblauch}
 
 \seealso{\code{\link{mlds}}, \code{\link{lik6pt}}}

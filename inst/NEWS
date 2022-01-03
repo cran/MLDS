@@ -159,3 +159,11 @@ version 0-4.4
 
    fixed formatting error in vignette
 
+version 0-4.6
+
+   changed URL's to DOI's for JSS citations
+
+version 0-4.7
+
+   compiled with compact-vignettes="both"
+   

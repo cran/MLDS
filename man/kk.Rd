@@ -29,7 +29,7 @@ Three data sets for one subject in a sample difference scaling experiment. The s
 }
 \references{
 Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference scaling in R. 
-\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \url{http://www.jstatsoft.org/v25/i02}.
+\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \doi{10.18637/jss.v025.i02}.
 }
 
 \examples{

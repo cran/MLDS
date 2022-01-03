@@ -34,7 +34,7 @@ binom.diagnostics(obj, nsim = 200, type = "deviance", no.warn = TRUE)
 \references{Wood, SN \emph{Generalized Additive Models: An Introduction with R}, Chapman \& Hall/CRC, 2006 
 
 Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference scaling in R. 
-\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \url{http://www.jstatsoft.org/v25/i02}.
+\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \doi{10.18637/jss.v025.i02}.
 }
 \author{ Ken Knoblauch }
 

@@ -26,10 +26,10 @@ SimMLDS(Trials, Scale, Sigma, n = 1)
 If the argument \code{n} is set to 1 (default), an object of class \sQuote{mlds.df} or \sQuote{mlbs.df} with simulated responses.  If \code{n} is greater than 1, a list of such objects is returned.
 }
 \references{
-Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5. 
+Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585,  \doi{10.1167/3.8.5}. 
 
 Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference scaling in R. 
-\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \url{http://www.jstatsoft.org/v25/i02}.
+\emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \doi{10.18637/jss.v025.i02}.
 }
 \author{
 Kenneth Knoblauch and Laurence T. Maloney

@@ -22,7 +22,7 @@ Get6pts(x, nrep, ...)
   \item{E}{data.frame indicating the trials (a, c) vs (a', c')}
 The attribute gives the row numbers from which the trials were obtained from the original data.frame.
 }
-\references{Maloney, L. T. and Yang, J. N. (2003) Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \url{http://journalofvision.org/3/8/5/}, doi:10.1167/3.8.5.}
+\references{Maloney, L. T. and Yang, J. N. (2003) Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \doi{10.1167/3.8.5}.}
 \author{Kenneth Knoblauch}
 \note{It is important that the stimuli are in physical order and not the experimental order. If in experimental order, then \code{SwapOrder} should be applied first.
 }

@@ -1,15 +1,17 @@
 citHeader("To cite package MLDS in publications use:")
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
 
 citEntry(entry="Article",
          title = "{MLDS} : Maximum likelihood difference scaling in {R}",
-         author = personList(as.person("K. Knoblauch"), 
-                             as.person("L. T. Maloney")),
+         author = personList(as.person("K. Knoblauch"),
+			    as.person("L. T. Maloney")), 
 	 journal = "Journal of Statistical Software",
          volume      = "25",
          year         = "2008",
          pages         = "1--26",
-         url          = "http://www.jstatsoft.org/v25/i02/",
+	 doi	      = "10.18637/jss.v025.i02",
          
          textVersion = 
-         paste("Knoblauch, K. & Maloney, L. T. (2008) MLDS : Maximum likelihood difference scaling in R, Journal of Statistical Software, 25, 1-26, http://www.jstatsoft.org/v25/i02/.")
+         paste("Knoblauch, K. & Maloney, L. T. (2008) MLDS : Maximum likelihood difference scaling in R, Journal of Statistical Software, 25, 1-26, doi:10.18637/jss.v025.i02.")
 )
