@@ -167,3 +167,16 @@ version 0-4.7
 
    compiled with compact-vignettes="both"
    
+version 0-4.8
+
+	fixed a bug in summary.mlds.bt when standard.scale = FALSE.
+	The values were not correctly computed.  (Thanks to Jakob Gruenwald)
+   
+version 0-4.9
+
+	Extra compression of vignette pdf file
+	
+version 0-4.901
+
+	Just a little more compression of vignette!
+	

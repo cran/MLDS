@@ -63,7 +63,7 @@
 		unnorm <- with(object, 
 				apply(boot.samp, 2, function(x) x[-n]/x[n]))
 		cbind(means = c(0, rowMeans(unnorm)), 
-			SD = c(0, sd(t(unnorm))))
+			SD = c(0, apply(unnorm, 1, sd))) # c(0, sd(t(unnorm))))
 	}
 }
 

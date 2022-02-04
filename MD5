@@ -1,4 +1,4 @@
-57c2293212f72bb251a8570a3e85d356 *DESCRIPTION
+05a66d1048577fd0fb335bda3a41d038 *DESCRIPTION
 555515e0868a9a3ac377eae298bf5108 *NAMESPACE
 0a8020fc5337a89f3343d28f583a5c9f *R/Get6pts.R
 1805e7a01d3c56139a09a71a0bedc1d2 *R/Rbind.R
@@ -6,7 +6,7 @@
 a4aeda1df770a6083cd7b6dd866f6fa2 *R/SwapOrder.R
 27413452c7e19e248dff97a39c5151f2 *R/as.mlds.df.R
 2c3d28ddea5e153d872e2ac807257192 *R/binom.diagnostics.R
-2a8338be7ae2d82b6945c5bf9973c45d *R/boot.mlds.R
+4754938e3d50e312dd690cba3140ddfc *R/boot.mlds.R
 72a3af7ecf6d49a3eb2a768b02951604 *R/coef.mlds.R
 79e81c05c5588c17e9ce6c1fa0425d15 *R/fitted.mlds.R
 957a87ddb6a060de14df75dbbdccfea8 *R/ix.mat2df.R
@@ -26,7 +26,7 @@ b1ffe8ef2d54ea5ee1b812559ff3870f *R/rbind.mlds.df.R
 4ba12a8f65f9b3f4a331bf1101bcef49 *R/simu.6pt.R
 d76eb38a56d2092c6656a9da6fa2f2df *R/summary.mlds.R
 7c22d4a7997b0d810bde53b429287f46 *R/vcov.mlds.R
-983b09bc216055be607ed5a73d7b88f9 *build/partial.rdb
+a58fd6b45cfb987cba7851c9ad016853 *build/partial.rdb
 df7e5a92e4c39b48e0c7eeeacbb47157 *build/vignette.rds
 631bc721cf29eb1f2a335ea4f7eac50d *data/AutumnLab.rda
 44eeb07abeb65dc2f0a51b4c47f2ee4e *data/Transparency.rda
@@ -35,10 +35,10 @@ df7e5a92e4c39b48e0c7eeeacbb47157 *build/vignette.rds
 8bb5581841bdf2893fe5dcfcb5fb94cd *data/kk3.rda
 93a4184612c16ef6b4b9f72c8e2a47d2 *data/kktriad.rda
 11a96fff155849f5e5707d4f5aa0a22a *inst/CITATION
-f5aa257e87626e9f9464a1718afefaf6 *inst/NEWS
+4636ce796325140bb1baac406fd00f32 *inst/NEWS
 f79863d81ca8b087f2820a9f8c2a542a *inst/doc/MLDS.R
 83772755bcf5267fe1207253af8d802f *inst/doc/MLDS.Stex
-0eab3f3bdb67c316f7b9dd4404616037 *inst/doc/MLDS.pdf
+84ba07f5f55fae17a8a6a2438d905d73 *inst/doc/MLDS.pdf
 f2c2f8506054f13a0013752f7824fb1f *man/AutumnLab.Rd
 5a57086b3069ef2a33b7804421e8e6fb *man/DisplayOneQuad.Rd
 26148010ee5e8f96964c0f9b6a004c38 *man/Get6pts.Rd
