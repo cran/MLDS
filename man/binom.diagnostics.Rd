@@ -31,7 +31,7 @@ binom.diagnostics(obj, nsim = 200, type = "deviance", no.warn = TRUE)
   \item{ObsRuns }{integer giving the observed number of runs in the sorted deviance residuals}
   \item{p }{numeric giving the proportion of runs in the simulation less than the observed value.}
   }
-\references{Wood, SN \emph{Generalized Additive Models: An Introduction with R}, Chapman \& Hall/CRC, 2006 
+\references{Wood, SN \emph{Generalized Additive Models: An Introduction with R}, Chapman & Hall/CRC, 2006 
 
 Knoblauch, K. and Maloney, L. T. (2008) MLDS:  Maximum likelihood difference scaling in R. 
 \emph{Journal of Statistical Software}, \bold{25:2}, 1--26, \doi{10.18637/jss.v025.i02}.

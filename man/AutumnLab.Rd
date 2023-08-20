@@ -24,7 +24,7 @@
 \references{
  Maloney, L. T. and Yang, J. N. (2003). Maximum likelihood difference scaling. \emph{Journal of Vision}, \bold{3(8):5}, 573--585, \doi{10.1167/3.8.5}.
  
-Charrier, C., Maloney, L. T., Cherifi, H. \& Knoblauch, K. (2007) 
+Charrier, C., Maloney, L. T., Cherifi, H. & Knoblauch, K. (2007) 
 Maximum likelihood difference scaling of image quality in 
 compression-degraded images, 
 \emph{Journal of the Optical Society of America}, \bold{24}, 3418--3426.

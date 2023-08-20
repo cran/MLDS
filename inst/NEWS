@@ -180,3 +180,10 @@ version 0-4.901
 
 	Just a little more compression of vignette!
 	
+version 0.5
+
+
+   corrected version misalignment in package man page and Description file.
+   fixed escaping of latex characters in .Rd files.
+
+	
